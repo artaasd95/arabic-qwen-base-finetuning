@@ -1,0 +1,497 @@
+# Core Dependencies for Arabic Qwen Base Fine-tuning
+
+# Deep Learning Framework
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+
+# Transformers and NLP
+transformers>=4.35.0
+tokenizers>=0.14.0
+sentencepiece>=0.1.99
+protobuf>=3.20.0
+
+# Hugging Face Ecosystem
+datasets>=2.14.0
+huggingface-hub>=0.17.0
+accelerate>=0.24.0
+peft>=0.6.0
+trl>=0.7.0
+
+# Quantization and Optimization
+bitsandbytes>=0.41.0
+optimum>=1.13.0
+auto-gptq>=0.4.0
+
+# Data Processing
+numpy>=1.24.0
+pandas>=2.0.0
+scipy>=1.10.0
+scikit-learn>=1.3.0
+
+# Text Processing and Arabic Support
+nltk>=3.8.0
+spacy>=3.6.0
+arabic-reshaper>=3.0.0
+python-bidi>=0.4.2
+polyglot>=16.7.4
+pyarabic>=0.6.15
+
+# Configuration Management
+pyyaml>=6.0.0
+hydra-core>=1.3.0
+omegaconf>=2.3.0
+python-dotenv>=1.0.0
+
+# Logging and Monitoring
+wandb>=0.15.0
+tensorboard>=2.14.0
+mlflow>=2.7.0
+loguru>=0.7.0
+
+# Progress Bars and Visualization
+tqdm>=4.65.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.15.0
+
+# File I/O and Utilities
+click>=8.1.0
+rich>=13.5.0
+colorama>=0.4.6
+tabulate>=0.9.0
+
+# HTTP and API
+requests>=2.31.0
+httpx>=0.24.0
+
+# Async Support
+aiofiles>=23.2.0
+aiohttp>=3.8.0
+
+# Memory and Performance
+psutil>=5.9.0
+memory-profiler>=0.60.0
+line-profiler>=4.1.0
+
+# Development Tools
+ipython>=8.14.0
+jupyter>=1.0.0
+notebook>=7.0.0
+jupyterlab>=4.0.0
+
+# Code Quality
+black>=23.7.0
+isort>=5.12.0
+flake8>=6.0.0
+mypy>=1.5.0
+pre-commit>=3.4.0
+
+# Documentation
+sphinx>=7.1.0
+sphinx-rtd-theme>=1.3.0
+mkdocs>=1.5.0
+mkdocs-material>=9.2.0
+
+# Environment Management
+conda>=23.7.0
+pip-tools>=7.3.0
+
+# Security
+bandit>=1.7.0
+safety>=2.3.0
+
+# Testing (basic)
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# GPU Monitoring
+nvidia-ml-py>=12.535.0
+gpustat>=1.1.0
+
+# Distributed Training
+torchrun>=2.0.0
+deepspeed>=0.10.0
+fairscale>=0.4.13
+
+# Model Serving
+fastapi>=0.103.0
+uvicorn>=0.23.0
+streamlit>=1.26.0
+gradio>=3.44.0
+
+# Cloud Storage
+boto3>=1.28.0
+google-cloud-storage>=2.10.0
+azure-storage-blob>=12.17.0
+
+# Database Support
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0
+pymongo>=4.5.0
+
+# Caching
+redis>=4.6.0
+memcached>=1.59
+
+# Serialization
+joblib>=1.3.0
+pickle5>=0.0.12
+dill>=0.3.7
+
+# Time and Date
+python-dateutil>=2.8.0
+pytz>=2023.3
+
+# Regular Expressions
+regex>=2023.8.8
+
+# Image Processing (if needed)
+Pillow>=10.0.0
+opencv-python>=4.8.0
+
+# Audio Processing (if needed)
+librosa>=0.10.0
+soundfile>=0.12.0
+
+# Video Processing (if needed)
+imageio>=2.31.0
+imageio-ffmpeg>=0.4.8
+
+# Scientific Computing
+sympy>=1.12
+
+# Optimization
+optuna>=3.3.0
+hyperopt>=0.2.7
+
+# Model Compression
+torch-pruning>=1.2.0
+
+# ONNX Support
+onnx>=1.14.0
+onnxruntime>=1.15.0
+
+# TensorRT (NVIDIA)
+nvidia-tensorrt>=8.6.0
+
+# Intel Optimization
+intel-extension-for-pytorch>=2.0.0
+
+# AMD ROCm Support
+torch-rocm>=2.0.0
+
+# Apple Silicon Optimization
+torch-audio-macos>=2.0.0
+
+# Profiling and Debugging
+py-spy>=0.3.14
+scalene>=1.5.26
+
+# Jupyter Extensions
+jupyterlab-widgets>=3.0.0
+ipywidgets>=8.1.0
+
+# Git Integration
+gitpython>=3.1.32
+
+# Configuration Validation
+cerberus>=1.3.4
+voluptuous>=0.13.1
+
+# CLI Enhancements
+typer>=0.9.0
+argparse>=1.4.0
+
+# Process Management
+supervisor>=4.2.5
+
+# System Information
+platform>=1.0.8
+
+# Networking
+netifaces>=0.11.0
+
+# Compression
+lz4>=4.3.2
+zstandard>=0.21.0
+
+# Encryption
+cryptography>=41.0.0
+
+# UUID Generation
+uuid>=1.30
+
+# JSON Processing
+orjson>=3.9.0
+ujson>=5.8.0
+
+# XML Processing
+lxml>=4.9.0
+beautifulsoup4>=4.12.0
+
+# CSV Processing
+csv>=1.0
+
+# Excel Processing
+openpyxl>=3.1.0
+xlsxwriter>=3.1.0
+
+# PDF Processing
+PyPDF2>=3.0.0
+
+# Archive Processing
+zipfile36>=0.1.3
+tarfile>=3.11.0
+
+# Email
+email-validator>=2.0.0
+
+# Phone Numbers
+phonumbers>=8.13.0
+
+# URLs
+furl>=2.1.3
+
+# Markdown
+markdown>=3.4.0
+
+# Template Engines
+jinja2>=3.1.0
+
+# Internationalization
+babel>=2.12.0
+
+# Timezone
+pytz>=2023.3
+
+# Color Support
+colorama>=0.4.6
+termcolor>=2.3.0
+
+# Progress Tracking
+alive-progress>=3.1.0
+
+# System Monitoring
+psutil>=5.9.0
+
+# Hardware Information
+py-cpuinfo>=9.0.0
+
+# Memory Management
+gc>=0.3.1
+
+# Threading
+threading>=1.0.0
+
+# Multiprocessing
+multiprocessing>=2.6.2.1
+
+# Async Programming
+asyncio>=3.4.3
+
+# Coroutines
+coroutines>=1.0.0
+
+# Event Loops
+uvloop>=0.17.0
+
+# WebSockets
+websockets>=11.0.0
+
+# HTTP/2
+httpcore>=0.17.0
+
+# GraphQL
+graphene>=3.3.0
+
+# Protocol Buffers
+protobuf>=4.24.0
+
+# Message Queues
+celery>=5.3.0
+rq>=1.15.0
+
+# Task Scheduling
+apscheduler>=3.10.0
+
+# Workflow Management
+airflow>=2.7.0
+prefect>=2.11.0
+
+# Container Support
+docker>=6.1.0
+kubernetes>=27.2.0
+
+# Infrastructure as Code
+terraform>=1.5.0
+ansible>=8.3.0
+
+# Monitoring and Alerting
+prometheus-client>=0.17.0
+grafana-api>=1.0.3
+
+# Secrets Management
+hashicorp-vault>=1.0.0
+
+# Feature Flags
+launchdarkly-server-sdk>=8.2.0
+
+# A/B Testing
+optimizely-sdk>=4.1.0
+
+# Analytics
+segment-analytics-python>=2.2.0
+
+# Error Tracking
+sentry-sdk>=1.30.0
+
+# Performance Monitoring
+new-relic>=8.9.0
+
+# Load Testing
+locust>=2.16.0
+
+# API Documentation
+flasgger>=0.9.7
+
+# OpenAPI
+openapi-spec-validator>=0.6.0
+
+# Swagger
+swagger-ui-bundle>=0.0.9
+
+# API Testing
+tavern>=2.0.0
+
+# Mock Servers
+wiremock>=2.35.0
+
+# Contract Testing
+pact-python>=2.0.0
+
+# Load Balancing
+haproxy>=2.8.0
+
+# Reverse Proxy
+nginx>=1.25.0
+
+# CDN
+cloudflare>=2.11.0
+
+# DNS
+dnspython>=2.4.0
+
+# SSL/TLS
+pyopenssl>=23.2.0
+
+# OAuth
+authlib>=1.2.0
+
+# JWT
+pyjwt>=2.8.0
+
+# SAML
+python3-saml>=1.15.0
+
+# LDAP
+python-ldap>=3.4.0
+
+# Kerberos
+pykerberos>=1.2.4
+
+# Multi-factor Authentication
+pyotp>=2.9.0
+
+# Captcha
+captcha>=0.4
+
+# Rate Limiting
+flask-limiter>=3.5.0
+
+# Circuit Breaker
+pybreaker>=1.0.0
+
+# Retry Logic
+retrying>=1.3.4
+
+# Backoff
+backoff>=2.2.0
+
+# Timeout
+timeout-decorator>=0.5.0
+
+# Caching
+cachetools>=5.3.0
+
+# Memoization
+functools32>=3.2.3
+
+# Lazy Loading
+lazy>=1.5
+
+# Singleton Pattern
+singleton-decorator>=1.0.0
+
+# Observer Pattern
+observer>=0.1.3
+
+# State Machine
+transitions>=0.9.0
+
+# Command Pattern
+click>=8.1.0
+
+# Factory Pattern
+factory-boy>=3.3.0
+
+# Builder Pattern
+builder>=0.1.0
+
+# Adapter Pattern
+adapter>=0.1.0
+
+# Decorator Pattern
+decorator>=5.1.0
+
+# Proxy Pattern
+proxy>=0.1.0
+
+# Strategy Pattern
+strategy>=0.1.0
+
+# Template Method Pattern
+template>=0.1.0
+
+# Visitor Pattern
+visitor>=0.1.4
+
+# Chain of Responsibility
+chain>=0.1.0
+
+# Mediator Pattern
+mediator>=0.1.0
+
+# Memento Pattern
+memento>=0.1.0
+
+# Iterator Pattern
+iterator>=0.1.0
+
+# Composite Pattern
+composite>=0.1.0
+
+# Bridge Pattern
+bridge>=0.1.0
+
+# Flyweight Pattern
+flyweight>=0.1.0
+
+# Facade Pattern
+facade>=0.1.0
+
+# Abstract Factory Pattern
+abstract-factory>=0.1.0
+
+# Prototype Pattern
+prototype>=0.1.0

@@ -1,0 +1,130 @@
+# Test Dependencies for Arabic Qwen Base Fine-tuning
+
+# Core testing framework
+pytest>=7.0.0
+pytest-cov>=4.0.0
+pytest-xdist>=3.0.0
+pytest-timeout>=2.1.0
+pytest-mock>=3.10.0
+
+# Coverage reporting
+coverage>=7.0.0
+coverage[toml]>=7.0.0
+
+# Test utilities
+factory-boy>=3.2.0
+faker>=18.0.0
+responses>=0.23.0
+requests-mock>=1.10.0
+
+# Mocking and fixtures
+pytest-fixtures>=0.1.0
+pytest-factoryboy>=2.5.0
+
+# Performance testing
+pytest-benchmark>=4.0.0
+pytest-profiling>=1.7.0
+
+# Parallel execution
+pytest-parallel>=0.1.0
+
+# HTML reporting
+pytest-html>=3.1.0
+
+# JSON reporting
+pytest-json-report>=1.5.0
+
+# Test data generation
+hypothesis>=6.70.0
+
+# Memory profiling
+memory-profiler>=0.60.0
+psutil>=5.9.0
+
+# Temporary file handling
+tempfile-utils>=0.1.0
+
+# Additional testing utilities
+testfixtures>=7.1.0
+freezegun>=1.2.0
+
+# Code quality (optional for testing)
+flake8>=6.0.0
+black>=23.0.0
+isort>=5.12.0
+mypy>=1.0.0
+
+# Documentation testing
+doctest>=2.7.0
+
+# Environment management
+python-dotenv>=1.0.0
+
+# Async testing support
+pytest-asyncio>=0.21.0
+aioresponses>=0.7.0
+
+# Database testing (if needed)
+pytest-postgresql>=5.0.0
+pytest-redis>=3.0.0
+
+# Mock external services
+responses>=0.23.0
+httpretty>=1.1.0
+
+# Test reporting and visualization
+allure-pytest>=2.12.0
+pytest-clarity>=1.0.0
+
+# Security testing
+bandit>=1.7.0
+safety>=2.3.0
+
+# Performance and load testing
+locust>=2.14.0
+
+# API testing
+tavern>=2.0.0
+
+# Property-based testing
+hypothesis>=6.70.0
+
+# Test data management
+pytest-datadir>=1.4.0
+pytest-datafiles>=3.0.0
+
+# Snapshot testing
+syrupy>=4.0.0
+
+# Visual regression testing
+pytest-playwright>=0.3.0
+
+# Test ordering and dependencies
+pytest-dependency>=0.5.0
+pytest-order>=1.1.0
+
+# Test retries
+pytest-rerunfailures>=11.1.0
+
+# Test selection and filtering
+pytest-picked>=0.4.0
+pytest-testmon>=2.0.0
+
+# Test documentation
+pytest-doctest-custom>=1.0.0
+
+# Integration with CI/CD
+pytest-github-actions-annotate-failures>=0.1.0
+pytest-azurepipelines>=1.0.0
+
+# Test metrics and analytics
+pytest-metadata>=3.0.0
+pytest-testrail>=2.9.0
+
+# Test environment isolation
+tox>=4.4.0
+virtualenv>=20.21.0
+
+# Test configuration management
+pytest-env>=0.8.0
+pytest-variables>=3.0.0
