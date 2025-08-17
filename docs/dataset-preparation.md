@@ -21,10 +21,10 @@ This guide covers comprehensive dataset preparation techniques for Arabic langua
 | **InstAr-500k** | 500k | Instruction | ⭐⭐⭐⭐⭐ | General SFT | HuggingFace |
 | **CIDAR** | 10k | Instruction | ⭐⭐⭐⭐⭐ | Cultural SFT | HuggingFace |
 | **Arabic-OpenHermes-2.5** | 982k | Conversation | ⭐⭐⭐⭐ | Chat SFT | HuggingFace |
-| **Arabic-preference-data-RLHF** | 11.5k | Preference | ⭐⭐⭐⭐⭐ | DPO/RLHF | HuggingFace |
+| **Arabic-preference-data-RLHF** | 11.5k | Preference | ⭐⭐⭐⭐⭐ | DPO/KTO/IPO/CPO | HuggingFace |
 | **ArabicQA_2.1M** | 2.14M | QA | ⭐⭐⭐⭐ | Domain SFT | HuggingFace |
 | **Arabic MMLU** | 14k-29k | Evaluation | ⭐⭐⭐⭐⭐ | Benchmarking | HuggingFace |
-| **argilla-dpo-mix-7k-arabic** | 7.5k | Preference | ⭐⭐⭐ | DPO | HuggingFace |
+| **argilla-dpo-mix-7k-arabic** | 7.5k | Preference | ⭐⭐⭐ | DPO/IPO/CPO | HuggingFace |
 
 ### Large-Scale Corpora
 
@@ -74,9 +74,9 @@ print(dataset["train"][0])
 
 ### 2. Preference Datasets
 
-**Purpose**: Train models to prefer better responses over worse ones
+**Purpose**: Train models to prefer better responses over worse ones using various preference optimization methods
 
-#### Arabic Preference Data for RLHF
+#### Arabic Preference Data for Multiple Methods
 ```python
 # Loading preference dataset
 dataset = load_dataset("FreedomIntelligence/Arabic-preference-data-RLHF")
@@ -91,6 +91,15 @@ print(dataset["train"][0])
 #   "score_rejected": 3.2
 # }
 ```
+
+#### Preference Method Selection Guide
+
+| Method | Best For | Data Requirements | Training Efficiency |
+|--------|----------|-------------------|--------------------|
+| **DPO** | General preference alignment | Paired chosen/rejected | Stable, moderate speed |
+| **KTO** | Binary preference data | Single responses with labels | Fast, memory efficient |
+| **IPO** | Identity-preserving optimization | Paired chosen/rejected | Balanced approach |
+| **CPO** | Contrastive learning | Paired chosen/rejected | High quality outputs |
 
 ### 3. Question Answering Datasets
 
@@ -331,7 +340,7 @@ qa_dataset = qa_dataset.map(
 )
 ```
 
-### DPO Format
+### Preference Optimization Formats
 
 ```python
 def format_dpo_data(example):
@@ -342,8 +351,48 @@ def format_dpo_data(example):
         "rejected": example["rejected_response"]
     }
 
-# Apply DPO formatting
-dpo_dataset = preference_dataset.map(format_dpo_data)
+def format_kto_data(example):
+    """Format data for KTO training"""
+    return {
+        "prompt": example["question"],
+        "completion": example["chosen_response"],
+        "label": True  # True for chosen, False for rejected
+    }
+
+def format_ipo_data(example):
+    """Format data for IPO training"""
+    return {
+        "prompt": example["question"],
+        "chosen": example["chosen_response"],
+        "rejected": example["rejected_response"]
+    }
+
+def format_cpo_data(example):
+    """Format data for CPO training"""
+    return {
+        "prompt": example["question"],
+        "chosen": example["chosen_response"],
+        "rejected": example["rejected_response"]
+    }
+
+# Apply preference formatting based on method
+preference_method = "dpo"  # or "kto", "ipo", "cpo"
+
+if preference_method == "dpo":
+    formatted_dataset = preference_dataset.map(format_dpo_data)
+elif preference_method == "kto":
+    # For KTO, create both positive and negative examples
+    positive_dataset = preference_dataset.map(format_kto_data)
+    negative_dataset = preference_dataset.map(lambda x: {
+        "prompt": x["question"],
+        "completion": x["rejected_response"],
+        "label": False
+    })
+    formatted_dataset = concatenate_datasets([positive_dataset, negative_dataset])
+elif preference_method == "ipo":
+    formatted_dataset = preference_dataset.map(format_ipo_data)
+elif preference_method == "cpo":
+    formatted_dataset = preference_dataset.map(format_cpo_data)
 ```
 
 ## 🔍 Quality Control
@@ -913,11 +962,41 @@ loaded_dataset = load_processed_dataset("./processed_data/arabic_instruct")
 
 ---
 
-This comprehensive dataset preparation guide provides all the tools and techniques needed to prepare high-quality Arabic datasets for Qwen model fine-tuning. The code examples are production-ready and optimized for the specific requirements of Arabic language processing.
+This comprehensive dataset preparation guide provides all the tools and techniques needed to prepare high-quality Arabic datasets for Qwen base model fine-tuning with SFT and preference optimization methods. The code examples are production-ready and optimized for the specific requirements of Arabic language processing.
+
+## 🎯 Training Pipeline Recommendations
+
+### SFT + Preference Optimization Workflow
+
+1. **Stage 1 - Supervised Fine-tuning (SFT)**:
+   - Use instruction datasets (InstAr-500k, CIDAR)
+   - Focus on task-specific capabilities
+   - Typical dataset size: 10k-500k examples
+
+2. **Stage 2 - Preference Optimization**:
+   - Choose method based on your requirements:
+     - **DPO**: Best for general use cases
+     - **KTO**: When you have limited preference data
+     - **IPO**: For maintaining model identity
+     - **CPO**: For highest quality outputs
+   - Use preference datasets (Arabic-preference-data-RLHF)
+   - Typical dataset size: 5k-50k preference pairs
+
+### Method Selection Decision Tree
+
+```
+Do you have paired preference data (chosen/rejected)?
+├── Yes: Consider DPO, IPO, or CPO
+│   ├── Need stable training? → DPO
+│   ├── Want to preserve model identity? → IPO
+│   └── Want highest quality outputs? → CPO
+└── No: Use KTO with binary labels
+```
 
 ## 📚 Next Steps
 
-1. Review [Hardware Requirements](./hardware-requirements.md) for optimal processing setup
+1. Review [Model Selection](./model-selection.md) for choosing the right base model
 2. Follow [Implementation Examples](./implementation-examples.md) for practical usage
 3. Check [Fine-tuning Guide](./fine-tuning-guide.md) for training procedures
-4. Consult [Troubleshooting Guide](./troubleshooting.md) for common issues
+4. Review [Hardware Requirements](./hardware-requirements.md) for optimal processing setup
+5. Consult [Troubleshooting Guide](./troubleshooting.md) for common issues

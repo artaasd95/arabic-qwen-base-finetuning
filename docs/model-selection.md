@@ -15,11 +15,11 @@ This guide helps you select the optimal Qwen base model for your Arabic language
 | Your Goal | Hardware | Recommended Model | Training Method | Expected Performance |
 |-----------|----------|-------------------|-----------------|---------------------|
 | **General Arabic Chatbot** | RTX 3060 12GB | Qwen2.5-3B | SFT + DPO | Excellent |
-| **Resource-Efficient Model** | RTX 3060 12GB | Qwen3-1.7B | SFT + 4-bit | Very Good |
-| **High-Quality Generation** | RTX 3060 12GB | Qwen2.5-7B (4-bit) | QLoRA | Excellent |
-| **Arabic QA Specialist** | RTX 3060 12GB | Qwen2.5-7B (4-bit) | Domain SFT | Outstanding |
+| **Resource-Efficient Model** | RTX 3060 12GB | Qwen3-1.7B | SFT + KTO | Very Good |
+| **High-Quality Generation** | RTX 3060 12GB | Qwen2.5-7B (4-bit) | SFT + IPO | Excellent |
+| **Domain Specialist** | RTX 3060 12GB | Qwen2.5-7B (4-bit) | Domain SFT + DPO | Outstanding |
 | **Creative Writing** | RTX 3060 12GB | Qwen3-1.7B | SFT + DPO | Very Good |
-| **Showcase/Demo** | RTX 3060 12GB | Qwen2.5-3B | SFT + DPO | Excellent |
+| **Showcase/Demo** | RTX 3060 12GB | Qwen2.5-3B | SFT + Multi-stage | Excellent |
 
 ## 🔍 Detailed Model Comparison
 
@@ -53,11 +53,11 @@ This guide helps you select the optimal Qwen base model for your Arabic language
 ### Qwen3-1.7B
 
 **✅ Strengths:**
-- Enhanced reasoning capabilities
 - Very low resource requirements
 - Fast inference speed
 - Excellent for creative writing tasks
 - Latest architecture improvements
+- Efficient for preference optimization
 
 **❌ Limitations:**
 - Smaller parameter count may limit complex understanding
@@ -67,9 +67,9 @@ This guide helps you select the optimal Qwen base model for your Arabic language
 **💡 Best For:**
 - Resource-constrained environments
 - Creative writing applications
-- Logical reasoning tasks
-- Rapid prototyping
+- Rapid prototyping and experimentation
 - Edge deployment scenarios
+- Fast preference optimization training
 
 **🔧 Technical Specs:**
 - **Parameters:** 1.7 billion
@@ -106,30 +106,26 @@ This guide helps you select the optimal Qwen base model for your Arabic language
 - **Context Length:** 128K tokens
 - **Training Method:** QLoRA recommended
 
-### Specialized Models
+### Additional Considerations
 
-#### Bee1reason-arabic-Qwen-14B
+#### Model Size vs Performance Trade-offs
 
-**✅ Strengths:**
-- Specialized for Arabic reasoning tasks
-- Excellent logical thinking capabilities
-- Strong performance on Arabic MMLU
-- Pre-trained on Arabic reasoning datasets
+**Small Models (1.7B-3B):**
+- Fast training and inference
+- Lower resource requirements
+- Suitable for most Arabic applications
+- Excellent for preference optimization experiments
 
-**❌ Limitations:**
-- Very large model requiring aggressive quantization
-- Slower inference
-- Limited availability and documentation
+**Medium Models (7B):**
+- Higher quality outputs
+- Better understanding of complex Arabic
+- Requires quantization for RTX 3060
+- Ideal for production applications
 
-**💡 Best For:**
-- Arabic logical reasoning applications
-- Educational assessment systems
-- Research in Arabic AI reasoning
-
-**🔧 Technical Specs:**
-- **Parameters:** 14 billion
-- **VRAM (4-bit):** ~8-10GB
-- **Training Method:** QLoRA only
+**Training Method Selection:**
+- **Full Fine-tuning:** Best for smaller models (1.7B-3B)
+- **LoRA:** Good balance for all model sizes
+- **QLoRA:** Required for 7B models on RTX 3060
 
 ## 🖥️ Hardware Compatibility
 
@@ -140,7 +136,7 @@ This guide helps you select the optimal Qwen base model for your Arabic language
 | Qwen3-1.7B | ✅ Full FT | ✅ Full FT | Full Fine-tuning |
 | Qwen2.5-3B | ✅ Full FT | ✅ Full FT | Full FT or LoRA |
 | Qwen2.5-7B | ❌ Too large | ✅ QLoRA | QLoRA only |
-| Bee1reason-14B | ❌ Too large | ⚠️ QLoRA (tight) | QLoRA with optimization |
+
 
 ### RTX 4060/4070 (8-16GB)
 
@@ -149,7 +145,7 @@ This guide helps you select the optimal Qwen base model for your Arabic language
 | Qwen3-1.7B | ✅ Excellent | Full precision available |
 | Qwen2.5-3B | ✅ Excellent | Full precision available |
 | Qwen2.5-7B | ⚠️ Limited | 4-bit quantization required |
-| Bee1reason-14B | ❌ Not recommended | Insufficient VRAM |
+
 
 ### RTX 4080/4090 (16-24GB)
 
@@ -158,7 +154,7 @@ This guide helps you select the optimal Qwen base model for your Arabic language
 | Qwen3-1.7B | ✅ Excellent | Overkill for this model |
 | Qwen2.5-3B | ✅ Excellent | Can run multiple instances |
 | Qwen2.5-7B | ✅ Good | Full precision possible |
-| Bee1reason-14B | ✅ Good | 4-bit quantization recommended |
+
 
 ## 🎯 Use Case Recommendations
 
@@ -177,19 +173,19 @@ This guide helps you select the optimal Qwen base model for your Arabic language
 Qwen2.5-3B → SFT (InstAr-500k) → DPO (Arabic-preference-data)
 ```
 
-### 2. Arabic Question Answering System
+### 2. Domain-Specific Arabic Applications
 
 **Recommended Model:** Qwen2.5-7B (4-bit)
 
 **Why:**
-- Superior knowledge and reasoning
-- Better handling of complex questions
-- Strong performance on Arabic MMLU
-- Excellent factual accuracy
+- Superior knowledge and understanding
+- Better handling of complex domain-specific content
+- High-quality text generation
+- Excellent for specialized applications
 
 **Training Pipeline:**
 ```
-Qwen2.5-7B → QLoRA SFT (ArabicQA_2.1M) → Evaluation (Arabic MMLU)
+Qwen2.5-7B → QLoRA SFT (Domain data) → IPO (Domain preferences)
 ```
 
 ### 3. Creative Arabic Writing Assistant
@@ -204,7 +200,7 @@ Qwen2.5-7B → QLoRA SFT (ArabicQA_2.1M) → Evaluation (Arabic MMLU)
 
 **Training Pipeline:**
 ```
-Qwen3-1.7B → SFT (Creative Arabic datasets) → DPO (Style preferences)
+Qwen3-1.7B → SFT (Creative Arabic datasets) → KTO (Style preferences)
 ```
 
 ### 4. Educational Arabic Language Tool
@@ -219,7 +215,7 @@ Qwen3-1.7B → SFT (Creative Arabic datasets) → DPO (Style preferences)
 
 **Training Pipeline:**
 ```
-Qwen2.5-3B → SFT (CIDAR + Educational data) → DPO (Teaching preferences)
+Qwen2.5-3B → SFT (CIDAR + Educational data) → CPO (Safe teaching preferences)
 ```
 
 ### 5. Research and Experimentation
@@ -263,12 +259,11 @@ Start Here
 
 ### Arabic Language Tasks Performance (Estimated)
 
-| Model | Instruction Following | QA Accuracy | Creative Writing | Cultural Awareness | Speed |
-|-------|---------------------|-------------|------------------|-------------------|-------|
+| Model | Instruction Following | Domain Knowledge | Creative Writing | Cultural Awareness | Speed |
+|-------|---------------------|------------------|------------------|-------------------|-------|
 | Qwen3-1.7B | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
 | Qwen2.5-3B | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
 | Qwen2.5-7B | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
-| Bee1reason-14B | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐ |
 
 ## 🚀 Getting Started
 
@@ -297,7 +292,8 @@ Check the [Hardware Requirements](./hardware-requirements.md) for system setup.
 - [ ] Use case requirements defined
 - [ ] Performance expectations set
 - [ ] Training method selected (Full FT vs. LoRA vs. QLoRA)
-- [ ] Dataset requirements identified
+- [ ] Preference optimization method chosen (DPO, KTO, IPO, CPO)
+- [ ] Dataset requirements identified (SFT + Preference data)
 - [ ] Evaluation metrics planned
 - [ ] Resource budget allocated
 
@@ -311,7 +307,7 @@ If you need to change models during development:
 
 ---
 
-**Final Recommendation**: For most users with RTX 3060 12GB, start with **Qwen2.5-3B** using the SFT + DPO pipeline. This provides the best balance of performance, compatibility, and development experience for Arabic language applications.
+**Final Recommendation**: For most users with RTX 3060 12GB, start with **Qwen2.5-3B** using the SFT + DPO pipeline. This provides the best balance of performance, compatibility, and development experience for Arabic base model fine-tuning. Consider experimenting with different preference optimization methods (KTO, IPO, CPO) based on your specific use case requirements.
 
 ## 📚 Next Steps
 

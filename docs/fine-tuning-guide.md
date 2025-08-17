@@ -12,7 +12,7 @@ This comprehensive guide covers the complete process of fine-tuning Qwen base mo
 
 ## 🎯 Overview
 
-### Recommended Models for RTX 3060 12GB
+### Recommended Base Models for RTX 3060 12GB (No Reasoning Models)
 
 | Model | Size | VRAM (FP16) | VRAM (4-bit) | Arabic Strength | Best Use Case |
 |-------|------|-------------|--------------|-----------------|---------------|
@@ -32,20 +32,30 @@ This comprehensive guide covers the complete process of fine-tuning Qwen base mo
 | **Domain-Specific** | ArabicQA_2.1M | 2.14M | QA systems | High (large-scale) |
 | | Arabic MMLU | 14k-29k | Knowledge evaluation | High (OALL benchmark) |
 
-## 🚀 Training Pipelines
+## 🚀 Training Pipelines for Base Models
 
-### Pipeline 1: Supervised Fine-Tuning (SFT) for Arabic Instruction Following
+### Pipeline 1: Supervised Fine-Tuning (SFT) + Preference Optimization
+**Best for: General Arabic conversation and instruction following**
 
-**Goal**: Create a general-purpose Arabic chatbot  
-**Best For**: RTX 3060 12GB, showcase demos  
+1. **Stage 1 - SFT**: Train base model on instruction-response pairs
+2. **Stage 2 - Preference Optimization**: Choose from multiple methods:
+   - **DPO (Direct Preference Optimization)**: Direct alignment without reward model
+   - **KTO (Kahneman-Tversky Optimization)**: Binary preference optimization
+   - **DNO (Distributional Preference Optimization)**: Distribution-aware preference learning
+   - **IPO (Identity Preference Optimization)**: Regularized preference optimization
+   - **CPO (Conservative Preference Optimization)**: Safe preference alignment
+
+**Goal**: Train base model on Arabic instruction-response pairs  
+**Best For**: RTX 3060 12GB, foundation for preference optimization  
 **Models**: Qwen2.5-3B, Qwen3-1.7B  
 **Datasets**: InstAr-500k, CIDAR, Arabic-OpenHermes-2.5  
 
-#### Basic Implementation
+#### Stage 1: Supervised Fine-Tuning Implementation
 
 ```python
 # Step 1: Load model and tokenizer
 from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
+from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 import torch
 
 model_name = "Qwen/Qwen2.5-3B"
@@ -56,59 +66,81 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="auto"
 )
 
-# Step 2: Prepare dataset
+# Step 2: Configure LoRA for base model fine-tuning
+lora_config = LoraConfig(
+    r=16,
+    lora_alpha=32,
+    target_modules=["q_proj", "v_proj", "k_proj", "o_proj"],
+    lora_dropout=0.1,
+    bias="none",
+    task_type="CAUSAL_LM"
+)
+
+model = prepare_model_for_kbit_training(model)
+model = get_peft_model(model, lora_config)
+
+# Step 3: Prepare dataset
 from datasets import load_dataset
 dataset = load_dataset("FreedomIntelligence/InstAr-500k")
 
-# Step 3: Format for SFT
+# Step 4: Format for SFT
 def format_prompt(example):
-    return {"text": f"### Instruction:\n{example['instruction']}\n\n### Response:\n{example['output']}"}
+    return {"text": f"### التعليمات:\n{example['instruction']}\n\n### الإجابة:\n{example['output']}"}
 
 dataset = dataset.map(format_prompt)
 
-# Step 4: Training configuration
+# Step 5: Training configuration for base models
 training_args = TrainingArguments(
     output_dir="./arabic-sft-model",
-    per_device_train_batch_size=4,
-    gradient_accumulation_steps=4,
+    per_device_train_batch_size=2,
+    gradient_accumulation_steps=8,
     learning_rate=2e-5,
     num_train_epochs=3,
     fp16=True,
-    save_steps=500,
+    gradient_checkpointing=True,
+    save_steps=1000,
     logging_steps=50,
+    warmup_steps=500,
 )
 
-# Step 5: Train
+# Step 6: Train
 from transformers import Trainer
 
 trainer = Trainer(
     model=model,
     args=training_args,
     train_dataset=dataset["train"],
-    # Add appropriate data collator
+    tokenizer=tokenizer,
 )
 
 trainer.train()
+trainer.save_model("./arabic-sft-final")
 ```
 
-### Pipeline 2: Preference Optimization (DPO/RLHF)
+### Stage 2: Preference Optimization Methods
 
-**Goal**: Improve response quality using human preferences  
-**Best For**: RTX 3060 12GB, preference tuning experiments  
-**Models**: Qwen3-1.7B, Qwen2.5-3B  
+**Goal**: Align base model with human preferences using various optimization techniques  
+**Best For**: RTX 3060 12GB, improving response quality and safety  
+**Models**: SFT checkpoint from Stage 1  
 **Datasets**: Arabic-preference-data-RLHF, argilla-dpo-mix-7k-arabic  
 
-#### DPO Implementation
+#### Method 1: Direct Preference Optimization (DPO)
+**Best for**: Direct alignment without reward model, memory efficient
 
 ```python
-# Step 1: Load SFT model (from Pipeline 1)
-model_name = "./arabic-sft-model"  # Your SFT model
-model = AutoModelForCausalLM.from_pretrained(model_name)
+# DPO Training Script
+from trl import DPOTrainer
+from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
 
-# Step 2: Load preference dataset
+# Load SFT model
+model = AutoModelForCausalLM.from_pretrained("./arabic-sft-final")
+tokenizer = AutoTokenizer.from_pretrained("./arabic-sft-final")
+
+# Load preference dataset
+from datasets import load_dataset
 dataset = load_dataset("FreedomIntelligence/Arabic-preference-data-RLHF")
 
-# Step 3: Format for DPO
+# Format for DPO
 def format_dpo(example):
     return {
         "prompt": example["question"],
@@ -118,97 +150,247 @@ def format_dpo(example):
 
 dataset = dataset.map(format_dpo)
 
-# Step 4: Configure DPO training
-from trl import DPOTrainer, DPOConfig
-
-dpo_config = DPOConfig(
+# DPO Training Arguments
+dpo_args = TrainingArguments(
     output_dir="./arabic-dpo-model",
-    per_device_train_batch_size=2,
-    gradient_accumulation_steps=8,
-    learning_rate=5e-6,
+    per_device_train_batch_size=1,
+    gradient_accumulation_steps=16,
+    learning_rate=5e-7,
+    num_train_epochs=1,
     fp16=True,
-    beta=0.1,  # DPO temperature
+    save_steps=500,
+    logging_steps=10,
+    warmup_steps=100,
 )
 
-# Step 5: Train with DPO
+# Initialize DPO Trainer
 dpo_trainer = DPOTrainer(
-    model,
-    ref_model=None,  # Use same model for reference
-    args=dpo_config,
+    model=model,
+    ref_model=None,  # Will create reference model automatically
+    args=dpo_args,
     train_dataset=dataset["train"],
+    tokenizer=tokenizer,
+    beta=0.1,  # KL divergence coefficient
+)
+
+# Train with DPO
+dpo_trainer.train()
+dpo_trainer.save_model("./arabic-dpo-final")
+```
+
+#### Method 2: Kahneman-Tversky Optimization (KTO)
+**Best for**: Binary preference optimization, robust to preference noise
+
+```python
+# KTO Training Script
+from trl import KTOTrainer
+
+# KTO Configuration
+kto_args = TrainingArguments(
+    output_dir="./arabic-kto-model",
+    per_device_train_batch_size=1,
+    gradient_accumulation_steps=16,
+    learning_rate=1e-6,
+    num_train_epochs=1,
+    fp16=True,
+    save_steps=500,
+    logging_steps=10,
+)
+
+# Initialize KTO Trainer
+kto_trainer = KTOTrainer(
+    model=model,
+    ref_model=None,
+    args=kto_args,
+    train_dataset=dataset["train"],
+    tokenizer=tokenizer,
+    beta=0.1,
+    desirable_weight=1.0,
+    undesirable_weight=1.0,
+)
+
+kto_trainer.train()
+kto_trainer.save_model("./arabic-kto-final")
+```
+
+#### Method 3: Identity Preference Optimization (IPO)
+**Best for**: Regularized preference learning, stable training
+
+```python
+# IPO Training Script
+from trl import DPOTrainer
+
+# IPO is a variant of DPO with different loss function
+ipo_args = TrainingArguments(
+    output_dir="./arabic-ipo-model",
+    per_device_train_batch_size=1,
+    gradient_accumulation_steps=16,
+    learning_rate=1e-6,
+    num_train_epochs=1,
+    fp16=True,
+    save_steps=500,
+    logging_steps=10,
+)
+
+# IPO Trainer (using DPO with IPO loss)
+ipo_trainer = DPOTrainer(
+    model=model,
+    ref_model=None,
+    args=ipo_args,
+    train_dataset=dataset["train"],
+    tokenizer=tokenizer,
+    beta=0.1,
+    loss_type="ipo",  # Use IPO loss instead of DPO
+)
+
+ipo_trainer.train()
+ipo_trainer.save_model("./arabic-ipo-final")
+```
+
+#### Method 4: Conservative Preference Optimization (CPO)
+**Best for**: Safe preference alignment, preventing harmful outputs
+
+```python
+# CPO Training Script
+from trl import CPOTrainer
+
+# CPO Configuration
+cpo_args = TrainingArguments(
+    output_dir="./arabic-cpo-model",
+    per_device_train_batch_size=1,
+    gradient_accumulation_steps=16,
+    learning_rate=1e-6,
+    num_train_epochs=1,
+    fp16=True,
+    save_steps=500,
+    logging_steps=10,
+)
+
+# Initialize CPO Trainer
+cpo_trainer = CPOTrainer(
+    model=model,
+    ref_model=None,
+    args=cpo_args,
+    train_dataset=dataset["train"],
+    tokenizer=tokenizer,
+    beta=0.1,
+    simpo_gamma=0.5,  # CPO regularization parameter
+)
+
+cpo_trainer.train()
+cpo_trainer.save_model("./arabic-cpo-final")
+```
+
+### Pipeline 2: Domain-Specific Base Model Fine-tuning
+**Best for: Specialized Arabic domains (legal, medical, technical)**
+
+1. **Stage 1 - SFT**: Train base model on domain-specific instruction data
+2. **Stage 2 - Domain Preference Optimization**: Apply preference methods on domain data
+3. **Stage 3 - Continued Training**: Additional fine-tuning on domain-specific datasets
+
+#### Domain-Specific Implementation
+
+```python
+# Domain-specific fine-tuning for base models
+from datasets import load_dataset, concatenate_datasets
+
+# Load domain-specific Arabic datasets
+domain_datasets = [
+    load_dataset("FreedomIntelligence/InstAr-500k"),
+    load_dataset("OALL/CIDAR"),
+    # Add other domain-specific datasets as needed
+]
+
+# Format for domain training
+def format_domain(example):
+    return {"text": f"### التعليمات:\n{example['instruction']}\n\n### الإجابة:\n{example['output']}"}
+
+# Combine and format datasets
+combined_domain = concatenate_datasets([ds.map(format_domain) for ds in domain_datasets])
+
+# Domain-specific training configuration
+domain_training_args = TrainingArguments(
+    output_dir="./arabic-domain-model",
+    per_device_train_batch_size=2,
+    gradient_accumulation_steps=8,
+    learning_rate=2e-5,
+    num_train_epochs=3,
+    fp16=True,
+    save_steps=1000,
+    logging_steps=50,
+    warmup_steps=500,
+)
+
+# Train domain model
+domain_trainer = Trainer(
+    model=model,
+    args=domain_training_args,
+    train_dataset=combined_domain["train"],
     tokenizer=tokenizer,
 )
 
-dpo_trainer.train()
+domain_trainer.train()
+domain_trainer.save_model("./arabic-domain-final")
 ```
 
-### Pipeline 3: Domain-Specific Fine-Tuning (Arabic QA)
+### Pipeline 3: Multi-Stage Preference Optimization
+**Best for: Maximum alignment and safety**
 
-**Goal**: Specialize in Arabic question answering  
-**Best For**: RTX 3060 12GB, QA showcases  
-**Models**: Qwen2.5-7B (4-bit), Qwen3-4B (4-bit)  
-**Datasets**: ArabicQA_2.1M, Arabic MMLU  
+1. **Stage 1 - SFT**: Base instruction following on general data
+2. **Stage 2 - Primary Preference**: Apply DPO or KTO for general alignment
+3. **Stage 3 - Secondary Preference**: Apply additional preference method (IPO/CPO) for refinement
 
-#### QA Specialization Implementation
+#### Multi-Stage Implementation Example
 
 ```python
-# Step 1: Load quantized model
-from transformers import BitsAndBytesConfig
+# Multi-stage preference optimization pipeline
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from trl import DPOTrainer, KTOTrainer
 
-bnb_config = BitsAndBytesConfig(
-    load_in_4bit=True,
-    bnb_4bit_quant_type="nf4",
-    bnb_4bit_compute_dtype=torch.float16,
+# Stage 1: Load SFT model
+base_model = AutoModelForCausalLM.from_pretrained("./arabic-sft-final")
+tokenizer = AutoTokenizer.from_pretrained("./arabic-sft-final")
+
+# Stage 2: Primary preference optimization (DPO)
+print("Starting Stage 2: DPO Training...")
+dpo_trainer = DPOTrainer(
+    model=base_model,
+    ref_model=None,
+    args=dpo_args,
+    train_dataset=preference_dataset["train"],
+    tokenizer=tokenizer,
+    beta=0.1,
 )
+dpo_trainer.train()
+dpo_model = dpo_trainer.save_model("./arabic-dpo-stage2")
 
-model = AutoModelForCausalLM.from_pretrained(
-    "Qwen/Qwen2.5-7B",
-    quantization_config=bnb_config,
-    device_map="auto"
+# Stage 3: Secondary preference optimization (IPO for refinement)
+print("Starting Stage 3: IPO Refinement...")
+refined_model = AutoModelForCausalLM.from_pretrained("./arabic-dpo-stage2")
+ipo_trainer = DPOTrainer(
+    model=refined_model,
+    ref_model=None,
+    args=ipo_args,
+    train_dataset=preference_dataset["train"],
+    tokenizer=tokenizer,
+    beta=0.05,  # Lower beta for refinement
+    loss_type="ipo",
 )
+ipo_trainer.train()
+ipo_trainer.save_model("./arabic-multistage-final")
 
-# Step 2: Load QA dataset
-dataset = load_dataset("riotu-lab/ArabicQA_2.1M")
-
-# Step 3: Format for QA
-def format_qa(example):
-    return {"text": f"السؤال: {example['question']}\nالإجابة: {example['answer']}"}
-
-dataset = dataset.map(format_qa)
-
-# Step 4: Configure LoRA
-from peft import LoraConfig, get_peft_model
-
-peft_config = LoraConfig(
-    r=16,
-    lora_alpha=32,
-    target_modules=["q_proj", "v_proj"],
-    lora_dropout=0.05,
-    bias="none",
-    task_type="CAUSAL_LM"
-)
-
-model = get_peft_model(model, peft_config)
-
-# Step 5: Train
-training_args = TrainingArguments(
-    output_dir="./arabic-qa-model",
-    per_device_train_batch_size=2,
-    gradient_accumulation_steps=8,
-    learning_rate=1e-4,
-    num_train_epochs=2,
-    fp16=True,
-    save_steps=1000,
-)
-
-trainer = Trainer(
-    model=model,
-    args=training_args,
-    train_dataset=dataset["train"],
-)
-
-trainer.train()
+print("Multi-stage preference optimization complete!")
 ```
+
+### Choosing the Right Preference Method
+
+| Method | Best For | Memory Usage | Training Speed | Stability |
+|--------|----------|--------------|----------------|-----------|
+| **DPO** | General alignment | Low | Fast | High |
+| **KTO** | Binary preferences | Low | Fast | Very High |
+| **IPO** | Stable training | Medium | Medium | Very High |
+| **CPO** | Safety-critical | Medium | Medium | High |
+| **Multi-stage** | Best quality | High | Slow | Medium |
 
 ## ⚡ Optimization Techniques
 

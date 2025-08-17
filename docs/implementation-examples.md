@@ -7,10 +7,12 @@ This document provides complete, ready-to-run code examples for fine-tuning Qwen
 1. [Environment Setup](#environment-setup)
 2. [Basic SFT Implementation](#basic-sft-implementation)
 3. [DPO Implementation](#dpo-implementation)
-4. [QLoRA Implementation](#qlora-implementation)
-5. [Complete Training Scripts](#complete-training-scripts)
-6. [Evaluation Examples](#evaluation-examples)
-7. [Inference Examples](#inference-examples)
+4. [KTO Implementation](#kto-implementation)
+5. [IPO Implementation](#ipo-implementation)
+6. [CPO Implementation](#cpo-implementation)
+7. [Complete Training Scripts](#complete-training-scripts)
+8. [Evaluation Examples](#evaluation-examples)
+9. [Inference Examples](#inference-examples)
 
 ## 🛠️ Environment Setup
 
@@ -47,7 +49,7 @@ from transformers import (
 )
 from datasets import load_dataset, Dataset
 from peft import LoraConfig, get_peft_model, TaskType
-from trl import DPOTrainer, DPOConfig
+from trl import DPOTrainer, DPOConfig, KTOTrainer, KTOConfig, IPOTrainer, IPOConfig, CPOTrainer, CPOConfig
 import json
 import os
 from typing import Dict, List, Optional
@@ -335,187 +337,267 @@ if __name__ == "__main__":
     )
 ```
 
-## ⚡ QLoRA Implementation
+## 🎯 KTO Implementation
 
-### Example 3: QLoRA for Large Models (7B+)
+### Example 3: KTO Training for Preference Optimization
 
 ```python
-class ArabicQLoRATrainer:
-    def __init__(self, model_name: str = "Qwen/Qwen2.5-7B", output_dir: str = "./arabic-qlora-model"):
-        self.model_name = model_name
+from trl import KTOTrainer, KTOConfig
+
+class ArabicKTOTrainer:
+    def __init__(self, sft_model_path: str, output_dir: str = "./arabic-kto-model"):
+        self.sft_model_path = sft_model_path
         self.output_dir = output_dir
         self.tokenizer = None
         self.model = None
         
-    def setup_quantized_model(self):
-        """Setup 4-bit quantized model with LoRA"""
-        print(f"Loading quantized model: {self.model_name}")
+    def setup_model_and_tokenizer(self):
+        """Load the SFT model for KTO training"""
+        print(f"Loading SFT model from: {self.sft_model_path}")
         
-        # 4-bit quantization configuration
-        bnb_config = BitsAndBytesConfig(
-            load_in_4bit=True,
-            bnb_4bit_quant_type="nf4",
-            bnb_4bit_compute_dtype=torch.float16,
-            bnb_4bit_use_double_quant=True,
-        )
-        
-        # Load tokenizer
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+        self.tokenizer = AutoTokenizer.from_pretrained(self.sft_model_path)
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
             
-        # Load quantized model
         self.model = AutoModelForCausalLM.from_pretrained(
-            self.model_name,
-            quantization_config=bnb_config,
+            self.sft_model_path,
+            torch_dtype=torch.float16,
             device_map="auto",
             trust_remote_code=True
         )
         
-        # LoRA configuration
-        peft_config = LoraConfig(
-            r=16,  # Rank
-            lora_alpha=32,  # Scaling factor
-            target_modules=[
-                "q_proj",
-                "k_proj", 
-                "v_proj",
-                "o_proj",
-                "gate_proj",
-                "up_proj",
-                "down_proj",
-            ],
-            lora_dropout=0.05,
-            bias="none",
-            task_type=TaskType.CAUSAL_LM,
-        )
+        print("SFT model loaded for KTO training")
         
-        # Apply LoRA
-        self.model = get_peft_model(self.model, peft_config)
-        
-        # Print trainable parameters
-        self.model.print_trainable_parameters()
-        
-        print("Quantized model with LoRA setup completed")
-        
-    def prepare_qa_dataset(self, dataset_name: str = "riotu-lab/ArabicQA_2.1M", max_samples: int = None):
-        """Prepare Arabic QA dataset"""
-        print(f"Loading QA dataset: {dataset_name}")
+    def prepare_kto_dataset(self, dataset_name: str = "argilla/argilla-dpo-mix-7k-arabic"):
+        """Load and format dataset for KTO training"""
+        print(f"Loading KTO dataset: {dataset_name}")
         
         dataset = load_dataset(dataset_name)
         
-        # Limit samples for testing
-        if max_samples:
-            dataset["train"] = dataset["train"].select(range(min(max_samples, len(dataset["train"]))))
-            
-        def format_qa(example):
-            """Format QA data for training"""
-            question = example.get("question", "")
-            answer = example.get("answer", "")
-            
-            # Arabic QA format
-            formatted_text = f"السؤال: {question}\nالإجابة: {answer}"
-            
-            return {"text": formatted_text}
+        def format_kto_data(example):
+            """Format data for KTO training"""
+            return {
+                "prompt": example["instruction"],
+                "completion": example["chosen"],
+                "label": True  # KTO uses binary labels
+            }
         
-        formatted_dataset = dataset.map(format_qa, remove_columns=dataset["train"].column_names)
+        formatted_dataset = dataset.map(format_kto_data)
         
-        print(f"QA dataset prepared. Training samples: {len(formatted_dataset['train']):,}")
+        print(f"KTO dataset prepared. Training samples: {len(formatted_dataset['train']):,}")
         return formatted_dataset
     
-    def tokenize_dataset(self, dataset, max_length: int = 512):
-        """Tokenize dataset for QLoRA training"""
-        def tokenize_function(examples):
-            tokenized = self.tokenizer(
-                examples["text"],
-                truncation=True,
-                padding="max_length",
-                max_length=max_length,
-                return_tensors="pt"
-            )
-            tokenized["labels"] = tokenized["input_ids"].clone()
-            return tokenized
+    def train_kto(self, dataset, epochs: int = 1, batch_size: int = 2, learning_rate: float = 1e-5):
+        """Train with Kahneman-Tversky Optimization"""
         
-        return dataset.map(
-            tokenize_function,
-            batched=True,
-            remove_columns=dataset["train"].column_names
-        )
-    
-    def train_qlora(self, dataset, epochs: int = 2, batch_size: int = 1, learning_rate: float = 1e-4):
-        """Train with QLoRA"""
-        
-        # Training arguments for QLoRA
-        training_args = TrainingArguments(
+        kto_config = KTOConfig(
             output_dir=self.output_dir,
             num_train_epochs=epochs,
             per_device_train_batch_size=batch_size,
-            gradient_accumulation_steps=16,  # Large accumulation for small batch
+            gradient_accumulation_steps=8,
             learning_rate=learning_rate,
-            weight_decay=0.01,
+            beta=0.1,  # KTO temperature parameter
+            desirable_weight=1.0,
+            undesirable_weight=1.0,
             logging_steps=25,
-            save_steps=1000,
+            save_steps=500,
             save_total_limit=2,
-            prediction_loss_only=True,
-            remove_unused_columns=False,
             fp16=True,
             gradient_checkpointing=True,
-            dataloader_pin_memory=False,
+            remove_unused_columns=False,
             report_to=None,
         )
         
-        # Data collator
-        data_collator = DataCollatorForLanguageModeling(
-            tokenizer=self.tokenizer,
-            mlm=False,
-        )
-        
-        # Initialize trainer
-        trainer = Trainer(
+        kto_trainer = KTOTrainer(
             model=self.model,
-            args=training_args,
+            args=kto_config,
             train_dataset=dataset["train"],
-            data_collator=data_collator,
+            tokenizer=self.tokenizer,
         )
         
-        # Start training
-        print("Starting QLoRA training...")
-        trainer.train()
+        print("Starting KTO training...")
+        kto_trainer.train()
         
-        # Save LoRA adapters
-        self.model.save_pretrained(self.output_dir)
+        kto_trainer.save_model()
         self.tokenizer.save_pretrained(self.output_dir)
         
-        print(f"QLoRA training completed. Adapters saved to {self.output_dir}")
-        
-        return trainer
+        print(f"KTO training completed. Model saved to {self.output_dir}")
+        return kto_trainer
+```
 
-# Usage example
-if __name__ == "__main__":
-    # Initialize QLoRA trainer
-    qlora_trainer = ArabicQLoRATrainer(
-        model_name="Qwen/Qwen2.5-7B",
-        output_dir="./models/arabic-qwen-qlora"
-    )
+## 🎯 IPO Implementation
+
+### Example 4: IPO Training for Identity Preference Optimization
+
+```python
+from trl import IPOTrainer, IPOConfig
+
+class ArabicIPOTrainer:
+    def __init__(self, sft_model_path: str, output_dir: str = "./arabic-ipo-model"):
+        self.sft_model_path = sft_model_path
+        self.output_dir = output_dir
+        self.tokenizer = None
+        self.model = None
+        
+    def setup_model_and_tokenizer(self):
+        """Load the SFT model for IPO training"""
+        print(f"Loading SFT model from: {self.sft_model_path}")
+        
+        self.tokenizer = AutoTokenizer.from_pretrained(self.sft_model_path)
+        if self.tokenizer.pad_token is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
+            
+        self.model = AutoModelForCausalLM.from_pretrained(
+            self.sft_model_path,
+            torch_dtype=torch.float16,
+            device_map="auto",
+            trust_remote_code=True
+        )
+        
+        print("SFT model loaded for IPO training")
+        
+    def prepare_ipo_dataset(self, dataset_name: str = "FreedomIntelligence/Arabic-preference-data-RLHF"):
+        """Load and format preference dataset for IPO"""
+        print(f"Loading IPO dataset: {dataset_name}")
+        
+        dataset = load_dataset(dataset_name)
+        
+        def format_ipo_data(example):
+            """Format data for IPO training"""
+            return {
+                "prompt": example["question"],
+                "chosen": example["chosen_response"],
+                "rejected": example["rejected_response"]
+            }
+        
+        formatted_dataset = dataset.map(format_ipo_data)
+        
+        print(f"IPO dataset prepared. Training samples: {len(formatted_dataset['train']):,}")
+        return formatted_dataset
     
-    # Setup quantized model with LoRA
-    qlora_trainer.setup_quantized_model()
+    def train_ipo(self, dataset, epochs: int = 1, batch_size: int = 2, learning_rate: float = 1e-5):
+        """Train with Identity Preference Optimization"""
+        
+        ipo_config = IPOConfig(
+            output_dir=self.output_dir,
+            num_train_epochs=epochs,
+            per_device_train_batch_size=batch_size,
+            gradient_accumulation_steps=8,
+            learning_rate=learning_rate,
+            beta=0.1,  # IPO regularization parameter
+            logging_steps=25,
+            save_steps=500,
+            save_total_limit=2,
+            fp16=True,
+            gradient_checkpointing=True,
+            remove_unused_columns=False,
+            report_to=None,
+        )
+        
+        ipo_trainer = IPOTrainer(
+            model=self.model,
+            ref_model=None,
+            args=ipo_config,
+            train_dataset=dataset["train"],
+            tokenizer=self.tokenizer,
+        )
+        
+        print("Starting IPO training...")
+        ipo_trainer.train()
+        
+        ipo_trainer.save_model()
+        self.tokenizer.save_pretrained(self.output_dir)
+        
+        print(f"IPO training completed. Model saved to {self.output_dir}")
+        return ipo_trainer
+```
+
+## 🎯 CPO Implementation
+
+### Example 5: CPO Training for Contrastive Preference Optimization
+
+```python
+from trl import CPOTrainer, CPOConfig
+
+class ArabicCPOTrainer:
+    def __init__(self, sft_model_path: str, output_dir: str = "./arabic-cpo-model"):
+        self.sft_model_path = sft_model_path
+        self.output_dir = output_dir
+        self.tokenizer = None
+        self.model = None
+        
+    def setup_model_and_tokenizer(self):
+        """Load the SFT model for CPO training"""
+        print(f"Loading SFT model from: {self.sft_model_path}")
+        
+        self.tokenizer = AutoTokenizer.from_pretrained(self.sft_model_path)
+        if self.tokenizer.pad_token is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
+            
+        self.model = AutoModelForCausalLM.from_pretrained(
+            self.sft_model_path,
+            torch_dtype=torch.float16,
+            device_map="auto",
+            trust_remote_code=True
+        )
+        
+        print("SFT model loaded for CPO training")
+        
+    def prepare_cpo_dataset(self, dataset_name: str = "argilla/argilla-dpo-mix-7k-arabic"):
+        """Load and format preference dataset for CPO"""
+        print(f"Loading CPO dataset: {dataset_name}")
+        
+        dataset = load_dataset(dataset_name)
+        
+        def format_cpo_data(example):
+            """Format data for CPO training"""
+            return {
+                "prompt": example["instruction"],
+                "chosen": example["chosen"],
+                "rejected": example["rejected"]
+            }
+        
+        formatted_dataset = dataset.map(format_cpo_data)
+        
+        print(f"CPO dataset prepared. Training samples: {len(formatted_dataset['train']):,}")
+        return formatted_dataset
     
-    # Prepare QA dataset
-    qa_dataset = qlora_trainer.prepare_qa_dataset(
-        max_samples=5000  # Use subset for testing
-    )
-    
-    # Tokenize dataset
-    tokenized_dataset = qlora_trainer.tokenize_dataset(qa_dataset)
-    
-    # Train with QLoRA
-    trainer = qlora_trainer.train_qlora(
-        dataset=tokenized_dataset,
-        epochs=2,
-        batch_size=1,
-        learning_rate=1e-4
-    )
+    def train_cpo(self, dataset, epochs: int = 1, batch_size: int = 2, learning_rate: float = 1e-5):
+        """Train with Contrastive Preference Optimization"""
+        
+        cpo_config = CPOConfig(
+            output_dir=self.output_dir,
+            num_train_epochs=epochs,
+            per_device_train_batch_size=batch_size,
+            gradient_accumulation_steps=8,
+            learning_rate=learning_rate,
+            beta=0.1,  # CPO temperature parameter
+            simpo_gamma=0.5,  # CPO-specific parameter
+            logging_steps=25,
+            save_steps=500,
+            save_total_limit=2,
+            fp16=True,
+            gradient_checkpointing=True,
+            remove_unused_columns=False,
+            report_to=None,
+        )
+        
+        cpo_trainer = CPOTrainer(
+            model=self.model,
+            ref_model=None,
+            args=cpo_config,
+            train_dataset=dataset["train"],
+            tokenizer=self.tokenizer,
+        )
+        
+        print("Starting CPO training...")
+        cpo_trainer.train()
+        
+        cpo_trainer.save_model()
+        self.tokenizer.save_pretrained(self.output_dir)
+        
+        print(f"CPO training completed. Model saved to {self.output_dir}")
+        return cpo_trainer
 ```
 
 ## 🔄 Complete Training Scripts
@@ -581,36 +663,71 @@ class ArabicQwenPipeline:
         print(f"SFT completed. Model saved to {sft_output_dir}")
         return str(sft_output_dir)
     
-    def run_dpo_stage(self, sft_model_path: str):
-        """Run DPO stage using SFT model"""
-        print("=== Starting DPO Stage ===")
+    def run_preference_stage(self, sft_model_path: str):
+        """Run preference optimization stage using SFT model"""
+        preference_method = self.config.get("preference_method", "dpo")
+        print(f"=== Starting {preference_method.upper()} Stage ===")
         
-        dpo_output_dir = self.experiment_dir / "dpo_model"
+        preference_output_dir = self.experiment_dir / f"{preference_method}_model"
         
-        dpo_trainer = ArabicDPOTrainer(
-            sft_model_path=sft_model_path,
-            output_dir=str(dpo_output_dir)
-        )
+        if preference_method == "dpo":
+            trainer = ArabicDPOTrainer(
+                sft_model_path=sft_model_path,
+                output_dir=str(preference_output_dir)
+            )
+            trainer.setup_model_and_tokenizer()
+            dataset = trainer.prepare_preference_dataset(self.config["preference_dataset"])
+            trainer.train_dpo(
+                dataset=dataset,
+                epochs=self.config["preference_epochs"],
+                batch_size=self.config["preference_batch_size"],
+                learning_rate=self.config["preference_learning_rate"]
+            )
+        elif preference_method == "kto":
+            trainer = ArabicKTOTrainer(
+                sft_model_path=sft_model_path,
+                output_dir=str(preference_output_dir)
+            )
+            trainer.setup_model_and_tokenizer()
+            dataset = trainer.prepare_kto_dataset(self.config["preference_dataset"])
+            trainer.train_kto(
+                dataset=dataset,
+                epochs=self.config["preference_epochs"],
+                batch_size=self.config["preference_batch_size"],
+                learning_rate=self.config["preference_learning_rate"]
+            )
+        elif preference_method == "ipo":
+            trainer = ArabicIPOTrainer(
+                sft_model_path=sft_model_path,
+                output_dir=str(preference_output_dir)
+            )
+            trainer.setup_model_and_tokenizer()
+            dataset = trainer.prepare_ipo_dataset(self.config["preference_dataset"])
+            trainer.train_ipo(
+                dataset=dataset,
+                epochs=self.config["preference_epochs"],
+                batch_size=self.config["preference_batch_size"],
+                learning_rate=self.config["preference_learning_rate"]
+            )
+        elif preference_method == "cpo":
+            trainer = ArabicCPOTrainer(
+                sft_model_path=sft_model_path,
+                output_dir=str(preference_output_dir)
+            )
+            trainer.setup_model_and_tokenizer()
+            dataset = trainer.prepare_cpo_dataset(self.config["preference_dataset"])
+            trainer.train_cpo(
+                dataset=dataset,
+                epochs=self.config["preference_epochs"],
+                batch_size=self.config["preference_batch_size"],
+                learning_rate=self.config["preference_learning_rate"]
+            )
         
-        # Setup and train
-        dpo_trainer.setup_model_and_tokenizer()
-        
-        preference_dataset = dpo_trainer.prepare_preference_dataset(
-            dataset_name=self.config["dpo_dataset"]
-        )
-        
-        dpo_trainer.train_dpo(
-            dataset=preference_dataset,
-            epochs=self.config["dpo_epochs"],
-            batch_size=self.config["dpo_batch_size"],
-            learning_rate=self.config["dpo_learning_rate"]
-        )
-        
-        print(f"DPO completed. Model saved to {dpo_output_dir}")
-        return str(dpo_output_dir)
+        print(f"{preference_method.upper()} completed. Model saved to {preference_output_dir}")
+        return str(preference_output_dir)
     
     def run_full_pipeline(self):
-        """Run complete SFT -> DPO pipeline"""
+        """Run complete SFT -> Preference Optimization pipeline"""
         print(f"Starting full pipeline for experiment: {self.experiment_name}")
         
         # Stage 1: SFT
@@ -619,9 +736,9 @@ class ArabicQwenPipeline:
         else:
             sft_model_path = self.config["existing_sft_model"]
             
-        # Stage 2: DPO
-        if self.config.get("run_dpo", True):
-            final_model_path = self.run_dpo_stage(sft_model_path)
+        # Stage 2: Preference Optimization
+        if self.config.get("run_preference", True):
+            final_model_path = self.run_preference_stage(sft_model_path)
         else:
             final_model_path = sft_model_path
             
@@ -634,42 +751,76 @@ class ArabicQwenPipeline:
 
 # Configuration examples
 CONFIG_EXAMPLES = {
-    "qwen_3b_full": {
+    "qwen_3b_dpo": {
         "base_model": "Qwen/Qwen2.5-3B",
         "output_dir": "./experiments",
-        "experiment_name": "qwen3b_arabic_full",
+        "experiment_name": "qwen3b_arabic_dpo",
         "run_sft": True,
-        "run_dpo": True,
+        "run_preference": True,
+        "preference_method": "dpo",
         "sft_dataset": "FreedomIntelligence/InstAr-500k",
         "sft_epochs": 3,
         "sft_batch_size": 4,
         "sft_learning_rate": 2e-5,
-        "dpo_dataset": "FreedomIntelligence/Arabic-preference-data-RLHF",
-        "dpo_epochs": 1,
-        "dpo_batch_size": 2,
-        "dpo_learning_rate": 5e-6
+        "preference_dataset": "FreedomIntelligence/Arabic-preference-data-RLHF",
+        "preference_epochs": 1,
+        "preference_batch_size": 2,
+        "preference_learning_rate": 5e-6
     },
-    "qwen_1.7b_efficient": {
+    "qwen_1.7b_kto": {
         "base_model": "Qwen/Qwen3-1.7B",
         "output_dir": "./experiments",
-        "experiment_name": "qwen1.7b_arabic_efficient",
+        "experiment_name": "qwen1.7b_arabic_kto",
         "run_sft": True,
-        "run_dpo": True,
+        "run_preference": True,
+        "preference_method": "kto",
         "sft_dataset": "FreedomIntelligence/CIDAR",
         "sft_epochs": 5,
         "sft_batch_size": 8,
         "sft_learning_rate": 3e-5,
-        "dpo_dataset": "argilla/argilla-dpo-mix-7k-arabic",
-        "dpo_epochs": 1,
-        "dpo_batch_size": 4,
-        "dpo_learning_rate": 1e-5
+        "preference_dataset": "argilla/argilla-dpo-mix-7k-arabic",
+        "preference_epochs": 1,
+        "preference_batch_size": 4,
+        "preference_learning_rate": 1e-5
+    },
+    "qwen_7b_ipo": {
+        "base_model": "Qwen/Qwen2.5-7B",
+        "output_dir": "./experiments",
+        "experiment_name": "qwen7b_arabic_ipo",
+        "run_sft": True,
+        "run_preference": True,
+        "preference_method": "ipo",
+        "sft_dataset": "FreedomIntelligence/InstAr-500k",
+        "sft_epochs": 2,
+        "sft_batch_size": 2,
+        "sft_learning_rate": 2e-5,
+        "preference_dataset": "FreedomIntelligence/Arabic-preference-data-RLHF",
+        "preference_epochs": 1,
+        "preference_batch_size": 1,
+        "preference_learning_rate": 1e-5
+    },
+    "qwen_3b_cpo": {
+        "base_model": "Qwen/Qwen2.5-3B",
+        "output_dir": "./experiments",
+        "experiment_name": "qwen3b_arabic_cpo",
+        "run_sft": True,
+        "run_preference": True,
+        "preference_method": "cpo",
+        "sft_dataset": "FreedomIntelligence/InstAr-500k",
+        "sft_epochs": 3,
+        "sft_batch_size": 4,
+        "sft_learning_rate": 2e-5,
+        "preference_dataset": "argilla/argilla-dpo-mix-7k-arabic",
+        "preference_epochs": 1,
+        "preference_batch_size": 2,
+        "preference_learning_rate": 1e-5
     }
 }
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Arabic Qwen Fine-tuning Pipeline")
     parser.add_argument("--config", choices=list(CONFIG_EXAMPLES.keys()), 
-                       default="qwen_3b_full", help="Configuration preset")
+                       default="qwen_3b_dpo", help="Configuration preset")
     parser.add_argument("--config-file", type=str, help="Custom config JSON file")
     
     args = parser.parse_args()
@@ -769,8 +920,9 @@ if __name__ == "__main__":
         {"question": "من هو مؤلف رواية 'مدن الملح'؟", "answer": "عبد الرحمن منيف"}
     ]
     
-    # Evaluate model
-    evaluator = ArabicModelEvaluator("./models/arabic-qwen-dpo")
+    # Evaluate model (replace with your trained model path)
+    model_path = "./experiments/qwen3b_arabic_dpo/dpo_model"  # or kto_model, ipo_model, cpo_model
+    evaluator = ArabicModelEvaluator(model_path)
     
     print("=== Instruction Following Evaluation ===")
     instruction_results = evaluator.evaluate_instruction_following(test_instructions)
@@ -892,8 +1044,9 @@ class ArabicQwenInference:
 
 # Usage example
 if __name__ == "__main__":
-    # Initialize inference
-    arabic_model = ArabicQwenInference("./models/arabic-qwen-dpo")
+    # Initialize inference (replace with your trained model path)
+    model_path = "./experiments/qwen3b_arabic_dpo/dpo_model"  # or kto_model, ipo_model, cpo_model
+    arabic_model = ArabicQwenInference(model_path)
     
     # Interactive chat
     print("Arabic Qwen Chat Interface (type 'quit' to exit)")
@@ -950,7 +1103,14 @@ monitor_gpu_usage()
 
 ---
 
-These implementation examples provide complete, production-ready code for fine-tuning Arabic Qwen models. All examples are optimized for RTX 3060 12GB and include proper error handling, memory management, and evaluation capabilities.
+These implementation examples provide complete, production-ready code for fine-tuning Arabic Qwen models with multiple preference optimization methods (DPO, KTO, IPO, CPO). All examples are optimized for RTX 3060 12GB and include proper error handling, memory management, and evaluation capabilities.
+
+## 🎯 Method Selection Guide
+
+- **DPO**: Best for general preference alignment, stable training
+- **KTO**: Efficient for binary preference data, faster training
+- **IPO**: Good for identity-preserving optimization, balanced approach
+- **CPO**: Excellent for contrastive learning, high-quality outputs
 
 ## 📚 Next Steps
 
@@ -958,3 +1118,4 @@ These implementation examples provide complete, production-ready code for fine-t
 2. Check [Hardware Requirements](./hardware-requirements.md) for system optimization
 3. Consult [Troubleshooting Guide](./troubleshooting.md) for common issues
 4. See [Fine-tuning Guide](./fine-tuning-guide.md) for theoretical background
+5. Explore [Model Selection](./model-selection.md) for choosing the right base model
