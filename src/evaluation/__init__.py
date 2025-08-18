@@ -7,6 +7,7 @@ including SFT, DPO, KTO, IPO, and CPO.
 from .base_evaluator import BaseEvaluator
 from .sft_evaluator import SFTEvaluator, create_sft_evaluator
 from .preference_evaluator import PreferenceEvaluator, create_preference_evaluator
+from .arabic_evaluator import ArabicEvaluator, create_arabic_evaluator
 
 __all__ = [
     # Base evaluator
@@ -15,10 +16,12 @@ __all__ = [
     # Specific evaluators
     "SFTEvaluator",
     "PreferenceEvaluator",
+    "ArabicEvaluator",
     
     # Factory functions
     "create_sft_evaluator",
     "create_preference_evaluator",
+    "create_arabic_evaluator",
     
     # Utility functions
     "get_evaluator",
@@ -45,6 +48,8 @@ def get_evaluator(method: str, **kwargs):
         return create_sft_evaluator(**kwargs)
     elif method in ["dpo", "kto", "ipo", "cpo"]:
         return create_preference_evaluator(method=method, **kwargs)
+    elif method == "arabic":
+        return create_arabic_evaluator(**kwargs)
     else:
         raise ValueError(
             f"Unsupported evaluation method: {method}. "
