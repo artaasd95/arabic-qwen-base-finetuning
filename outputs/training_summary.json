@@ -1,0 +1,115 @@
+{
+  "total_methods": 5,
+  "completed": 5,
+  "failed": 0,
+  "success_rate": 1.0,
+  "total_training_time": 1.781937599182129,
+  "results_by_method": {
+    "sft": {
+      "method": "sft",
+      "status": "completed",
+      "training_time": 1.7618107795715332,
+      "epochs": 2,
+      "final_loss": 0.0,
+      "epoch_results": [
+        {
+          "loss": 0.0,
+          "samples": 5,
+          "batches": 0
+        },
+        {
+          "loss": 0.0,
+          "samples": 5,
+          "batches": 0
+        }
+      ],
+      "data_samples": 5,
+      "timestamp": "2025-08-21T16:05:06.080086"
+    },
+    "dpo": {
+      "method": "dpo",
+      "status": "completed",
+      "training_time": 0.0050051212310791016,
+      "epochs": 2,
+      "final_loss": 0.0,
+      "epoch_results": [
+        {
+          "loss": 0.0,
+          "samples": 3,
+          "batches": 0
+        },
+        {
+          "loss": 0.0,
+          "samples": 3,
+          "batches": 0
+        }
+      ],
+      "data_samples": 3,
+      "timestamp": "2025-08-21T16:05:06.087064"
+    },
+    "kto": {
+      "method": "kto",
+      "status": "completed",
+      "training_time": 0.004151582717895508,
+      "epochs": 2,
+      "final_loss": 0.0,
+      "epoch_results": [
+        {
+          "loss": 0.0,
+          "samples": 4,
+          "batches": 0
+        },
+        {
+          "loss": 0.0,
+          "samples": 4,
+          "batches": 0
+        }
+      ],
+      "data_samples": 4,
+      "timestamp": "2025-08-21T16:05:06.093220"
+    },
+    "ipo": {
+      "method": "ipo",
+      "status": "completed",
+      "training_time": 0.0056688785552978516,
+      "epochs": 2,
+      "final_loss": 0.0,
+      "epoch_results": [
+        {
+          "loss": 0.0,
+          "samples": 3,
+          "batches": 0
+        },
+        {
+          "loss": 0.0,
+          "samples": 3,
+          "batches": 0
+        }
+      ],
+      "data_samples": 3,
+      "timestamp": "2025-08-21T16:05:06.101912"
+    },
+    "cpo": {
+      "method": "cpo",
+      "status": "completed",
+      "training_time": 0.005301237106323242,
+      "epochs": 2,
+      "final_loss": 0.0,
+      "epoch_results": [
+        {
+          "loss": 0.0,
+          "samples": 3,
+          "batches": 0
+        },
+        {
+          "loss": 0.0,
+          "samples": 3,
+          "batches": 0
+        }
+      ],
+      "data_samples": 3,
+      "timestamp": "2025-08-21T16:05:06.108944"
+    }
+  },
+  "timestamp": "2025-08-21T16:05:06.110119"
+}

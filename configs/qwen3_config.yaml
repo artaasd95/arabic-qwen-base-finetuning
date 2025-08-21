@@ -1,0 +1,189 @@
+# Qwen3-0.6B Configuration for Arabic Fine-tuning
+# Optimized for lightweight training with CUDA support
+
+model:
+  name: "Qwen/Qwen2.5-0.5B"  # Using closest available model
+  model_type: "qwen"
+  tokenizer_name: "Qwen/Qwen2.5-0.5B"
+  max_length: 2048
+  trust_remote_code: true
+  torch_dtype: "bfloat16"  # Memory efficient
+  attn_implementation: "flash_attention_2"  # Faster attention
+
+# Training configuration
+training:
+  # General settings
+  output_dir: "./outputs"
+  overwrite_output_dir: true
+  do_train: true
+  do_eval: true
+  
+  # Optimization settings
+  per_device_train_batch_size: 2  # Small for 0.6B model
+  per_device_eval_batch_size: 2
+  gradient_accumulation_steps: 4  # Effective batch size = 8
+  learning_rate: 5.0e-5
+  weight_decay: 0.01
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_epsilon: 1.0e-8
+  max_grad_norm: 1.0
+  
+  # Scheduler settings
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  
+  # Training duration
+  num_train_epochs: 3
+  max_steps: -1  # Use epochs instead
+  
+  # Evaluation settings
+  evaluation_strategy: "steps"
+  eval_steps: 50
+  save_strategy: "steps"
+  save_steps: 50
+  save_total_limit: 3
+  load_best_model_at_end: true
+  metric_for_best_model: "eval_loss"
+  greater_is_better: false
+  
+  # Logging
+  logging_strategy: "steps"
+  logging_steps: 10
+  report_to: ["tensorboard"]
+  
+  # Memory optimization
+  fp16: false
+  bf16: true  # Better for training stability
+  gradient_checkpointing: true
+  dataloader_pin_memory: true
+  dataloader_num_workers: 2
+  
+  # CUDA optimizations
+  tf32: true
+  
+  # Early stopping
+  early_stopping_patience: 3
+  early_stopping_threshold: 0.001
+
+# Method-specific configurations
+sft:
+  # Supervised Fine-tuning specific settings
+  max_seq_length: 2048
+  packing: false  # Keep sequences separate
+  
+dpo:
+  # Direct Preference Optimization
+  beta: 0.1  # KL penalty coefficient
+  max_length: 2048
+  max_prompt_length: 1024
+  
+kto:
+  # Kahneman-Tversky Optimization
+  beta: 0.1
+  desirable_weight: 1.0
+  undesirable_weight: 1.0
+  
+ipo:
+  # Identity Preference Optimization
+  beta: 0.1
+  
+cpo:
+  # Contrastive Preference Optimization
+  beta: 0.1
+  alpha: 1.0
+
+# Data configuration
+data:
+  # Dataset paths
+  train_file: null  # Will be set dynamically
+  validation_file: null  # Will be set dynamically
+  test_file: null
+  
+  # Data processing
+  preprocessing_num_workers: 4
+  max_train_samples: null  # Use all available
+  max_eval_samples: null
+  
+  # Arabic-specific settings
+  language: "ar"
+  text_column: "text"
+  
+# LoRA configuration (for memory efficiency)
+lora:
+  enabled: true
+  r: 16  # Rank
+  alpha: 32  # Scaling factor
+  dropout: 0.1
+  target_modules: ["q_proj", "v_proj", "k_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
+  bias: "none"
+  task_type: "CAUSAL_LM"
+
+# Quantization (optional, for even more memory savings)
+quantization:
+  enabled: false  # Disable for now
+  load_in_4bit: false
+  load_in_8bit: false
+  bnb_4bit_compute_dtype: "bfloat16"
+  bnb_4bit_use_double_quant: true
+  bnb_4bit_quant_type: "nf4"
+
+# Environment settings
+environment:
+  seed: 42
+  device: "cuda"
+  device_id: 0
+  mixed_precision: "bf16"
+  
+  # CUDA settings
+  cuda_visible_devices: "0"
+  torch_cuda_arch_list: "8.9"
+  
+  # Memory settings
+  max_memory_mb: 8000  # Adjust based on your GPU
+  
+# Monitoring and logging
+monitoring:
+  wandb:
+    enabled: false  # Set to true if you have wandb
+    project: "arabic-qwen-finetuning"
+    entity: null
+    
+  tensorboard:
+    enabled: true
+    log_dir: "./logs"
+    
+# Evaluation configuration
+evaluation:
+  metrics: ["perplexity", "bleu", "rouge"]
+  generate_samples: true
+  num_samples: 5
+  max_new_tokens: 256
+  temperature: 0.7
+  do_sample: true
+  top_p: 0.9
+  
+# Checkpointing
+checkpointing:
+  save_strategy: "steps"
+  save_steps: 100
+  save_total_limit: 3
+  load_best_model_at_end: true
+  
+# Performance optimization
+optimization:
+  # Compilation
+  torch_compile: false  # May cause issues with some setups
+  
+  # Memory
+  gradient_checkpointing: true
+  use_cache: false  # Disable during training
+  
+  # Data loading
+  dataloader_pin_memory: true
+  dataloader_num_workers: 2
+  prefetch_factor: 2
+  
+  # Attention optimization
+  use_flash_attention: true
+  attention_dropout: 0.1

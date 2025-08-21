@@ -1,0 +1,30 @@
+{
+  "sft": {
+    "arabic_sft_samples": {
+      "num_samples": 5,
+      "format": "instruction_response",
+      "description": "Sample Arabic instruction-response pairs for supervised fine-tuning"
+    }
+  },
+  "dpo": {
+    "arabic_dpo_samples": {
+      "num_samples": 3,
+      "format": "preference_pairs",
+      "description": "Sample Arabic preference pairs for Direct Preference Optimization"
+    }
+  },
+  "kto": {
+    "arabic_kto_samples": {
+      "num_samples": 4,
+      "format": "binary_feedback",
+      "description": "Sample Arabic responses with binary feedback for KTO"
+    }
+  },
+  "evaluation": {
+    "arabic_eval_samples": {
+      "num_samples": 3,
+      "format": "multiple_choice",
+      "description": "Sample Arabic multiple choice questions for evaluation"
+    }
+  }
+}

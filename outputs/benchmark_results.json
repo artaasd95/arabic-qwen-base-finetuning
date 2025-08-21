@@ -1,0 +1,421 @@
+{
+  "system_performance": {
+    "cpu": {
+      "usage_percent": 10.5,
+      "core_count": 28
+    },
+    "memory": {
+      "total_gb": 63.9180908203125,
+      "used_gb": 23.426891326904297,
+      "usage_percent": 36.7
+    },
+    "gpu": {
+      "gpu_0": {
+        "name": "NVIDIA GeForce RTX 3060",
+        "total_memory_gb": 11.9993896484375,
+        "allocated_memory_gb": 0.0,
+        "reserved_memory_gb": 0.0,
+        "utilization_percent": 0.0
+      }
+    },
+    "timestamp": "2025-08-21T16:07:04.372592"
+  },
+  "training_efficiency": {
+    "sft": {
+      "training_time_s": 1.7618107795715332,
+      "final_loss": 0.0,
+      "samples_per_second": 5.675978439882158,
+      "loss_reduction_rate": 1.0,
+      "efficiency_score": 5.675978439882158,
+      "data_samples": 5,
+      "epochs": 2
+    },
+    "dpo": {
+      "training_time_s": 0.0050051212310791016,
+      "final_loss": 0.0,
+      "samples_per_second": 1198.7721621492879,
+      "loss_reduction_rate": 1.0,
+      "efficiency_score": 1198.7721621492879,
+      "data_samples": 3,
+      "epochs": 2
+    },
+    "kto": {
+      "training_time_s": 0.004151582717895508,
+      "final_loss": 0.0,
+      "samples_per_second": 1926.9759375179462,
+      "loss_reduction_rate": 1.0,
+      "efficiency_score": 1926.9759375179462,
+      "data_samples": 4,
+      "epochs": 2
+    },
+    "ipo": {
+      "training_time_s": 0.0056688785552978516,
+      "final_loss": 0.0,
+      "samples_per_second": 1058.410396601758,
+      "loss_reduction_rate": 1.0,
+      "efficiency_score": 1058.410396601758,
+      "data_samples": 3,
+      "epochs": 2
+    },
+    "cpo": {
+      "training_time_s": 0.005301237106323242,
+      "final_loss": 0.0,
+      "samples_per_second": 1131.8112885091073,
+      "loss_reduction_rate": 1.0,
+      "efficiency_score": 1131.8112885091073,
+      "data_samples": 3,
+      "epochs": 2
+    }
+  },
+  "inference_benchmarks": {
+    "sft": {
+      "avg_inference_time_ms": 0.15887737274169922,
+      "throughput_inferences_per_sec": 6294.162489870644,
+      "total_benchmark_time_s": 0.015887737274169922,
+      "num_runs": 100,
+      "device": "cuda"
+    },
+    "dpo": {
+      "avg_inference_time_ms": 0.16022205352783203,
+      "throughput_inferences_per_sec": 6241.338055415017,
+      "total_benchmark_time_s": 0.016022205352783203,
+      "num_runs": 100,
+      "device": "cuda"
+    },
+    "kto": {
+      "avg_inference_time_ms": 0.16000986099243164,
+      "throughput_inferences_per_sec": 6249.614828721708,
+      "total_benchmark_time_s": 0.016000986099243164,
+      "num_runs": 100,
+      "device": "cuda"
+    },
+    "ipo": {
+      "avg_inference_time_ms": 0.1571822166442871,
+      "throughput_inferences_per_sec": 6362.042865593763,
+      "total_benchmark_time_s": 0.01571822166442871,
+      "num_runs": 100,
+      "device": "cuda"
+    },
+    "cpo": {
+      "avg_inference_time_ms": 0.1601409912109375,
+      "throughput_inferences_per_sec": 6244.497379704621,
+      "total_benchmark_time_s": 0.01601409912109375,
+      "num_runs": 100,
+      "device": "cuda"
+    }
+  },
+  "training_results": {
+    "sft": {
+      "method": "sft",
+      "status": "completed",
+      "training_time": 1.7618107795715332,
+      "epochs": 2,
+      "final_loss": 0.0,
+      "epoch_results": [
+        {
+          "loss": 0.0,
+          "samples": 5,
+          "batches": 0
+        },
+        {
+          "loss": 0.0,
+          "samples": 5,
+          "batches": 0
+        }
+      ],
+      "data_samples": 5,
+      "timestamp": "2025-08-21T16:05:06.080086"
+    },
+    "dpo": {
+      "method": "dpo",
+      "status": "completed",
+      "training_time": 0.0050051212310791016,
+      "epochs": 2,
+      "final_loss": 0.0,
+      "epoch_results": [
+        {
+          "loss": 0.0,
+          "samples": 3,
+          "batches": 0
+        },
+        {
+          "loss": 0.0,
+          "samples": 3,
+          "batches": 0
+        }
+      ],
+      "data_samples": 3,
+      "timestamp": "2025-08-21T16:05:06.087064"
+    },
+    "kto": {
+      "method": "kto",
+      "status": "completed",
+      "training_time": 0.004151582717895508,
+      "epochs": 2,
+      "final_loss": 0.0,
+      "epoch_results": [
+        {
+          "loss": 0.0,
+          "samples": 4,
+          "batches": 0
+        },
+        {
+          "loss": 0.0,
+          "samples": 4,
+          "batches": 0
+        }
+      ],
+      "data_samples": 4,
+      "timestamp": "2025-08-21T16:05:06.093220"
+    },
+    "ipo": {
+      "method": "ipo",
+      "status": "completed",
+      "training_time": 0.0056688785552978516,
+      "epochs": 2,
+      "final_loss": 0.0,
+      "epoch_results": [
+        {
+          "loss": 0.0,
+          "samples": 3,
+          "batches": 0
+        },
+        {
+          "loss": 0.0,
+          "samples": 3,
+          "batches": 0
+        }
+      ],
+      "data_samples": 3,
+      "timestamp": "2025-08-21T16:05:06.101912"
+    },
+    "cpo": {
+      "method": "cpo",
+      "status": "completed",
+      "training_time": 0.005301237106323242,
+      "epochs": 2,
+      "final_loss": 0.0,
+      "epoch_results": [
+        {
+          "loss": 0.0,
+          "samples": 3,
+          "batches": 0
+        },
+        {
+          "loss": 0.0,
+          "samples": 3,
+          "batches": 0
+        }
+      ],
+      "data_samples": 3,
+      "timestamp": "2025-08-21T16:05:06.108944"
+    }
+  },
+  "benchmark_timestamp": "2025-08-21T16:07:04.814127",
+  "summary": {
+    "best_overall_efficiency": {
+      "method": "kto",
+      "score": 1926.9759375179462
+    },
+    "fastest_training": {
+      "method": "kto",
+      "time_s": 0.004151582717895508
+    },
+    "lowest_final_loss": {
+      "method": "sft",
+      "loss": 0.0
+    },
+    "method_rankings": {
+      "by_efficiency": [
+        [
+          "kto",
+          {
+            "training_time_s": 0.004151582717895508,
+            "final_loss": 0.0,
+            "samples_per_second": 1926.9759375179462,
+            "loss_reduction_rate": 1.0,
+            "efficiency_score": 1926.9759375179462,
+            "data_samples": 4,
+            "epochs": 2
+          }
+        ],
+        [
+          "dpo",
+          {
+            "training_time_s": 0.0050051212310791016,
+            "final_loss": 0.0,
+            "samples_per_second": 1198.7721621492879,
+            "loss_reduction_rate": 1.0,
+            "efficiency_score": 1198.7721621492879,
+            "data_samples": 3,
+            "epochs": 2
+          }
+        ],
+        [
+          "cpo",
+          {
+            "training_time_s": 0.005301237106323242,
+            "final_loss": 0.0,
+            "samples_per_second": 1131.8112885091073,
+            "loss_reduction_rate": 1.0,
+            "efficiency_score": 1131.8112885091073,
+            "data_samples": 3,
+            "epochs": 2
+          }
+        ],
+        [
+          "ipo",
+          {
+            "training_time_s": 0.0056688785552978516,
+            "final_loss": 0.0,
+            "samples_per_second": 1058.410396601758,
+            "loss_reduction_rate": 1.0,
+            "efficiency_score": 1058.410396601758,
+            "data_samples": 3,
+            "epochs": 2
+          }
+        ],
+        [
+          "sft",
+          {
+            "training_time_s": 1.7618107795715332,
+            "final_loss": 0.0,
+            "samples_per_second": 5.675978439882158,
+            "loss_reduction_rate": 1.0,
+            "efficiency_score": 5.675978439882158,
+            "data_samples": 5,
+            "epochs": 2
+          }
+        ]
+      ],
+      "by_speed": [
+        [
+          "kto",
+          {
+            "training_time_s": 0.004151582717895508,
+            "final_loss": 0.0,
+            "samples_per_second": 1926.9759375179462,
+            "loss_reduction_rate": 1.0,
+            "efficiency_score": 1926.9759375179462,
+            "data_samples": 4,
+            "epochs": 2
+          }
+        ],
+        [
+          "dpo",
+          {
+            "training_time_s": 0.0050051212310791016,
+            "final_loss": 0.0,
+            "samples_per_second": 1198.7721621492879,
+            "loss_reduction_rate": 1.0,
+            "efficiency_score": 1198.7721621492879,
+            "data_samples": 3,
+            "epochs": 2
+          }
+        ],
+        [
+          "cpo",
+          {
+            "training_time_s": 0.005301237106323242,
+            "final_loss": 0.0,
+            "samples_per_second": 1131.8112885091073,
+            "loss_reduction_rate": 1.0,
+            "efficiency_score": 1131.8112885091073,
+            "data_samples": 3,
+            "epochs": 2
+          }
+        ],
+        [
+          "ipo",
+          {
+            "training_time_s": 0.0056688785552978516,
+            "final_loss": 0.0,
+            "samples_per_second": 1058.410396601758,
+            "loss_reduction_rate": 1.0,
+            "efficiency_score": 1058.410396601758,
+            "data_samples": 3,
+            "epochs": 2
+          }
+        ],
+        [
+          "sft",
+          {
+            "training_time_s": 1.7618107795715332,
+            "final_loss": 0.0,
+            "samples_per_second": 5.675978439882158,
+            "loss_reduction_rate": 1.0,
+            "efficiency_score": 5.675978439882158,
+            "data_samples": 5,
+            "epochs": 2
+          }
+        ]
+      ],
+      "by_loss": [
+        [
+          "sft",
+          {
+            "training_time_s": 1.7618107795715332,
+            "final_loss": 0.0,
+            "samples_per_second": 5.675978439882158,
+            "loss_reduction_rate": 1.0,
+            "efficiency_score": 5.675978439882158,
+            "data_samples": 5,
+            "epochs": 2
+          }
+        ],
+        [
+          "dpo",
+          {
+            "training_time_s": 0.0050051212310791016,
+            "final_loss": 0.0,
+            "samples_per_second": 1198.7721621492879,
+            "loss_reduction_rate": 1.0,
+            "efficiency_score": 1198.7721621492879,
+            "data_samples": 3,
+            "epochs": 2
+          }
+        ],
+        [
+          "kto",
+          {
+            "training_time_s": 0.004151582717895508,
+            "final_loss": 0.0,
+            "samples_per_second": 1926.9759375179462,
+            "loss_reduction_rate": 1.0,
+            "efficiency_score": 1926.9759375179462,
+            "data_samples": 4,
+            "epochs": 2
+          }
+        ],
+        [
+          "ipo",
+          {
+            "training_time_s": 0.0056688785552978516,
+            "final_loss": 0.0,
+            "samples_per_second": 1058.410396601758,
+            "loss_reduction_rate": 1.0,
+            "efficiency_score": 1058.410396601758,
+            "data_samples": 3,
+            "epochs": 2
+          }
+        ],
+        [
+          "cpo",
+          {
+            "training_time_s": 0.005301237106323242,
+            "final_loss": 0.0,
+            "samples_per_second": 1131.8112885091073,
+            "loss_reduction_rate": 1.0,
+            "efficiency_score": 1131.8112885091073,
+            "data_samples": 3,
+            "epochs": 2
+          }
+        ]
+      ]
+    },
+    "best_inference_speed": {
+      "method": "ipo",
+      "throughput": 6362.042865593763
+    }
+  }
+}
