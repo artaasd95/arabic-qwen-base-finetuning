@@ -1,0 +1,107 @@
+[
+  {
+    "method": "SFT",
+    "dataset": "arabic-instruct",
+    "path": "models\\qwen-3-base-arabic-arabic-instruct-SFT",
+    "model_name": "qwen-3-base-arabic-arabic-instruct-SFT",
+    "samples_trained": 13300
+  },
+  {
+    "method": "SFT",
+    "dataset": "arabic-chat",
+    "path": "models\\qwen-3-base-arabic-arabic-chat-SFT",
+    "model_name": "qwen-3-base-arabic-arabic-chat-SFT",
+    "samples_trained": 13300
+  },
+  {
+    "method": "SFT",
+    "dataset": "arabic-qa",
+    "path": "models\\qwen-3-base-arabic-arabic-qa-SFT",
+    "model_name": "qwen-3-base-arabic-arabic-qa-SFT",
+    "samples_trained": 13300
+  },
+  {
+    "method": "DPO",
+    "dataset": "arabic-instruct",
+    "path": "models\\qwen-3-base-arabic-arabic-instruct-DPO",
+    "model_name": "qwen-3-base-arabic-arabic-instruct-DPO",
+    "samples_trained": 6000
+  },
+  {
+    "method": "DPO",
+    "dataset": "arabic-chat",
+    "path": "models\\qwen-3-base-arabic-arabic-chat-DPO",
+    "model_name": "qwen-3-base-arabic-arabic-chat-DPO",
+    "samples_trained": 6000
+  },
+  {
+    "method": "DPO",
+    "dataset": "arabic-qa",
+    "path": "models\\qwen-3-base-arabic-arabic-qa-DPO",
+    "model_name": "qwen-3-base-arabic-arabic-qa-DPO",
+    "samples_trained": 6000
+  },
+  {
+    "method": "KTO",
+    "dataset": "arabic-instruct",
+    "path": "models\\qwen-3-base-arabic-arabic-instruct-KTO",
+    "model_name": "qwen-3-base-arabic-arabic-instruct-KTO",
+    "samples_trained": 6400
+  },
+  {
+    "method": "KTO",
+    "dataset": "arabic-chat",
+    "path": "models\\qwen-3-base-arabic-arabic-chat-KTO",
+    "model_name": "qwen-3-base-arabic-arabic-chat-KTO",
+    "samples_trained": 6400
+  },
+  {
+    "method": "KTO",
+    "dataset": "arabic-qa",
+    "path": "models\\qwen-3-base-arabic-arabic-qa-KTO",
+    "model_name": "qwen-3-base-arabic-arabic-qa-KTO",
+    "samples_trained": 6400
+  },
+  {
+    "method": "IPO",
+    "dataset": "arabic-instruct",
+    "path": "models\\qwen-3-base-arabic-arabic-instruct-IPO",
+    "model_name": "qwen-3-base-arabic-arabic-instruct-IPO",
+    "samples_trained": 5800
+  },
+  {
+    "method": "IPO",
+    "dataset": "arabic-chat",
+    "path": "models\\qwen-3-base-arabic-arabic-chat-IPO",
+    "model_name": "qwen-3-base-arabic-arabic-chat-IPO",
+    "samples_trained": 5800
+  },
+  {
+    "method": "IPO",
+    "dataset": "arabic-qa",
+    "path": "models\\qwen-3-base-arabic-arabic-qa-IPO",
+    "model_name": "qwen-3-base-arabic-arabic-qa-IPO",
+    "samples_trained": 5800
+  },
+  {
+    "method": "CPO",
+    "dataset": "arabic-instruct",
+    "path": "models\\qwen-3-base-arabic-arabic-instruct-CPO",
+    "model_name": "qwen-3-base-arabic-arabic-instruct-CPO",
+    "samples_trained": 4100
+  },
+  {
+    "method": "CPO",
+    "dataset": "arabic-chat",
+    "path": "models\\qwen-3-base-arabic-arabic-chat-CPO",
+    "model_name": "qwen-3-base-arabic-arabic-chat-CPO",
+    "samples_trained": 4100
+  },
+  {
+    "method": "CPO",
+    "dataset": "arabic-qa",
+    "path": "models\\qwen-3-base-arabic-arabic-qa-CPO",
+    "model_name": "qwen-3-base-arabic-arabic-qa-CPO",
+    "samples_trained": 4100
+  }
+]

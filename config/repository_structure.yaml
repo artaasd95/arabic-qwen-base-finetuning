@@ -1,0 +1,245 @@
+# Repository Structure Configuration for Arabic Qwen Fine-tuning Project
+# This file defines the standard structure and organization of the project
+
+project_info:
+  name: "arabic-qwen-base-finetuning"
+  description: "Fine-tuning Qwen models for Arabic language tasks using multiple methods"
+  version: "1.0.0"
+  author: "Arabic NLP Team"
+  license: "MIT"
+
+# Directory structure definition
+directory_structure:
+  root: "."
+  
+  # Source code directories
+  src:
+    path: "src"
+    description: "Main source code directory"
+    subdirectories:
+      data_loader:
+        path: "src/data_loader"
+        description: "Data loading and preprocessing modules"
+        files:
+          - "base_loader.py"
+          - "arabic_datasets.py"
+          - "preprocessing.py"
+      
+      models:
+        path: "src/models"
+        description: "Model definitions and configurations"
+        files:
+          - "qwen_model.py"
+          - "model_config.py"
+          - "model_utils.py"
+      
+      training:
+        path: "src/training"
+        description: "Training logic for different methods"
+        files:
+          - "sft_trainer.py"
+          - "dpo_trainer.py"
+          - "kto_trainer.py"
+          - "ipo_trainer.py"
+          - "cpo_trainer.py"
+          - "base_trainer.py"
+      
+      evaluation:
+        path: "src/evaluation"
+        description: "Model evaluation and metrics"
+        files:
+          - "evaluator.py"
+          - "metrics.py"
+          - "benchmarks.py"
+      
+      utils:
+        path: "src/utils"
+        description: "Utility functions and helpers"
+        files:
+          - "logging_utils.py"
+          - "file_utils.py"
+          - "arabic_utils.py"
+          - "huggingface_utils.py"
+  
+  # Configuration directories
+  config:
+    path: "config"
+    description: "Configuration files"
+    files:
+      - "training_config.yaml"
+      - "model_config.yaml"
+      - "dataset_config.yaml"
+      - "repository_structure.yaml"
+  
+  # Scripts directory
+  scripts:
+    path: "scripts"
+    description: "Executable scripts"
+    files:
+      - "train_all_methods.py"
+      - "real_training.py"
+      - "upload_to_huggingface.py"
+      - "inference.py"
+      - "evaluate_models.py"
+  
+  # Examples directory
+  examples:
+    path: "examples"
+    description: "Usage examples and demonstrations"
+    files:
+      - "model_usage_examples.py"
+      - "quick_start.py"
+      - "advanced_usage.py"
+  
+  # Output directories
+  outputs:
+    path: "outputs"
+    description: "Training outputs and results"
+    subdirectories:
+      models:
+        path: "outputs/models"
+        description: "Trained model checkpoints"
+      
+      logs:
+        path: "outputs/logs"
+        description: "Training and evaluation logs"
+      
+      results:
+        path: "outputs/results"
+        description: "Evaluation results and metrics"
+      
+      plots:
+        path: "outputs/plots"
+        description: "Training curves and visualizations"
+  
+  # Documentation directories
+  docs:
+    path: "docs"
+    description: "Project documentation"
+    files:
+      - "README.md"
+      - "INSTALLATION.md"
+      - "USAGE.md"
+      - "API_REFERENCE.md"
+      - "CONTRIBUTING.md"
+  
+  # Tests directory
+  tests:
+    path: "tests"
+    description: "Unit and integration tests"
+    subdirectories:
+      unit:
+        path: "tests/unit"
+        description: "Unit tests"
+      
+      integration:
+        path: "tests/integration"
+        description: "Integration tests"
+      
+      fixtures:
+        path: "tests/fixtures"
+        description: "Test data and fixtures"
+
+# File naming conventions
+naming_conventions:
+  models:
+    pattern: "qwen-3-base-arabic-{dataset}-{method}"
+    examples:
+      - "qwen-3-base-arabic-instruct-SFT"
+      - "qwen-3-base-arabic-chat-DPO"
+      - "qwen-3-base-arabic-qa-KTO"
+  
+  checkpoints:
+    pattern: "checkpoint-{step}"
+    examples:
+      - "checkpoint-1000"
+      - "checkpoint-2000"
+  
+  logs:
+    pattern: "{method}_{dataset}_{timestamp}.log"
+    examples:
+      - "SFT_arabic-instruct_20241220_143022.log"
+      - "DPO_arabic-chat_20241220_143022.log"
+
+# Required files in root directory
+root_files:
+  - "requirements.txt"
+  - "setup.py"
+  - "README.md"
+  - "LICENSE"
+  - ".gitignore"
+  - "pyproject.toml"
+
+# Environment and dependency management
+environment:
+  python_version: ">=3.8"
+  
+  core_dependencies:
+    - "torch>=2.0.0"
+    - "transformers>=4.30.0"
+    - "datasets>=2.10.0"
+    - "accelerate>=0.20.0"
+    - "peft>=0.4.0"
+    - "trl>=0.7.0"
+    - "huggingface-hub>=0.15.0"
+  
+  optional_dependencies:
+    - "wandb"  # For experiment tracking
+    - "tensorboard"  # For logging
+    - "mlflow"  # For model management
+    - "bitsandbytes"  # For quantization
+    - "optimum"  # For optimization
+
+# Model repository structure on Hugging Face
+huggingface_structure:
+  repository_naming:
+    pattern: "qwen-3-base-arabic-{dataset}-{method}"
+    organization: "your-organization"  # Replace with actual organization
+  
+  required_files:
+    - "config.json"
+    - "tokenizer_config.json"
+    - "tokenizer.json"
+    - "special_tokens_map.json"
+    - "README.md"
+    - "model.safetensors"  # or pytorch_model.bin
+  
+  optional_files:
+    - "training_args.json"
+    - "trainer_state.json"
+    - "optimizer.pt"
+    - "scheduler.pt"
+
+# Quality assurance
+quality_standards:
+  code_style:
+    - "Follow PEP 8 guidelines"
+    - "Use type hints where appropriate"
+    - "Include docstrings for all functions and classes"
+  
+  documentation:
+    - "All modules must have README files"
+    - "API documentation must be up to date"
+    - "Examples must be tested and working"
+  
+  testing:
+    - "Minimum 80% code coverage"
+    - "All tests must pass before merging"
+    - "Include both unit and integration tests"
+
+# Deployment considerations
+deployment:
+  model_formats:
+    - "PyTorch (.pt, .pth)"
+    - "SafeTensors (.safetensors)"
+    - "ONNX (.onnx)"  # For production deployment
+  
+  optimization:
+    - "Quantization support (8-bit, 4-bit)"
+    - "ONNX conversion for inference"
+    - "TensorRT optimization for NVIDIA GPUs"
+  
+  serving:
+    - "FastAPI endpoints"
+    - "Docker containerization"
+    - "Kubernetes deployment manifests"

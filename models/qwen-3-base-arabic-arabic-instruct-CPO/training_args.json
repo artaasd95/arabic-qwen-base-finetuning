@@ -1,0 +1,12 @@
+{
+  "output_dir": "models\\qwen-3-base-arabic-arabic-instruct-CPO",
+  "num_train_epochs": 3,
+  "per_device_train_batch_size": 4,
+  "learning_rate": 2e-05,
+  "warmup_steps": 100,
+  "logging_steps": 10,
+  "save_steps": 500,
+  "method": "CPO",
+  "dataset": "arabic-instruct",
+  "samples_trained": 4100
+}
