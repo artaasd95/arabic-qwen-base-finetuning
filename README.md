@@ -537,14 +537,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Qwen Team](https://github.com/QwenLM/Qwen) for the base models
 - [Hugging Face](https://huggingface.co/) for the transformers library
 - [TRL](https://github.com/huggingface/trl) for preference optimization implementations
-- The Arabic NLP community for datasets and feedback
+- The open source community for datasets and feedback
 
 ## 📞 Support
 
-- **Documentation**: [https://arabic-qwen-base-finetuning.readthedocs.io/](https://arabic-qwen-base-finetuning.readthedocs.io/)
 - **Issues**: [GitHub Issues](https://github.com/artaasd95/arabic-qwen-base-finetuning/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/artaasd95/arabic-qwen-base-finetuning/discussions)
-- **Email**: team@arabic-nlp.org
 
 ## 🗺️ Roadmap
 
@@ -557,4 +555,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Made with ❤️ for the Arabic NLP community**
+**Made with ❤️ for the open source community**

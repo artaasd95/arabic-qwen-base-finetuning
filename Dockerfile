@@ -261,10 +261,10 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.url="https://github.com/artaasd95/arabic-qwen-base-finetuning" \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url="https://github.com/artaasd95/arabic-qwen-base-finetuning" \
-      org.label-schema.vendor="Arabic NLP Team" \
-      org.label-schema.version=$VERSION \
-      org.label-schema.schema-version="1.0" \
-      maintainer="team@arabic-nlp.org"
+      org.label-schema.vendor="artaasd95" \
+       org.label-schema.version=$VERSION \
+       org.label-schema.schema-version="1.0" \
+       maintainer="artaasd95@gmail.com"
 
 # =============================================================================
 # Usage Examples:

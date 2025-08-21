@@ -135,7 +135,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Contributors
 
-- Arabic NLP Team
+- artaasd95
 - Community contributors (see CONTRIBUTORS.md)
 
 ---
@@ -181,7 +181,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Qwen team for the base model architecture
 - Hugging Face for the transformers library
-- Arabic NLP community for feedback and contributions
+- Open source community for feedback and contributions
 - Open source contributors and maintainers
 
 ---

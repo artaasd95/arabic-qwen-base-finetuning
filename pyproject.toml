@@ -10,10 +10,10 @@ readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
 authors = [
-    {name = "Arabic NLP Team", email = "contact@arabic-nlp.org"},
+    {name = "artaasd95", email = "artaasd95@gmail.com"},
 ]
 maintainers = [
-    {name = "Arabic NLP Team", email = "contact@arabic-nlp.org"},
+    {name = "artaasd95", email = "artaasd95@gmail.com"},
 ]
 keywords = [
     "arabic",
@@ -279,11 +279,11 @@ all = [
 
 [project.urls]
 Homepage = "https://github.com/artaasd95/arabic-qwen-base-finetuning"
-Documentation = "https://arabic-qwen-base-finetuning.readthedocs.io/"
+Documentation = "https://github.com/artaasd95/arabic-qwen-base-finetuning/blob/main/README.md"
 Repository = "https://github.com/artaasd95/arabic-qwen-base-finetuning"
 "Bug Tracker" = "https://github.com/artaasd95/arabic-qwen-base-finetuning/issues"
 Changelog = "https://github.com/artaasd95/arabic-qwen-base-finetuning/blob/main/CHANGELOG.md"
-"Funding" = "https://github.com/sponsors/arabic-nlp"
+"Funding" = "https://github.com/sponsors/artaasd95"
 
 [project.scripts]
 arabic-qwen-train = "src.training.cli:main"

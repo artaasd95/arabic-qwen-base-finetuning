@@ -173,13 +173,13 @@ setup(
     description="A comprehensive framework for fine-tuning Qwen models on Arabic datasets using various optimization methods",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author="Arabic NLP Team",
-    author_email="team@arabic-nlp.org",
+    author="artaasd95",
+     author_email="artaasd95@gmail.com",
     url="https://github.com/artaasd95/arabic-qwen-base-finetuning",
     project_urls={
         "Bug Reports": "https://github.com/artaasd95/arabic-qwen-base-finetuning/issues",
         "Source": "https://github.com/artaasd95/arabic-qwen-base-finetuning",
-        "Documentation": "https://arabic-qwen-base-finetuning.readthedocs.io/",
+        "Documentation": "https://github.com/artaasd95/arabic-qwen-base-finetuning/blob/main/README.md",
     },
     packages=find_packages(exclude=["tests", "tests.*", "notebooks", "scripts"]),
     package_data=package_data,
@@ -241,7 +241,7 @@ print("""
    3. Configure your training parameters
    4. Run training: arabic-qwen-train --config config/sft_config.yaml
 
-📖 Documentation: https://arabic-qwen-base-finetuning.readthedocs.io/
+📖 Documentation: https://github.com/artaasd95/arabic-qwen-base-finetuning/blob/main/README.md
 🐛 Issues: https://github.com/artaasd95/arabic-qwen-base-finetuning/issues
 💬 Discussions: https://github.com/artaasd95/arabic-qwen-base-finetuning/discussions
 

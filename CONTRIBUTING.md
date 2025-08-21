@@ -17,7 +17,7 @@ We welcome contributions from the community! This guide will help you get starte
 
 ## 📜 Code of Conduct
 
-This project and everyone participating in it is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [team@arabic-nlp.org](mailto:team@arabic-nlp.org).
+This project and everyone participating in it is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior through GitHub issues.
 
 ## 🚀 Getting Started
 
@@ -385,8 +385,8 @@ python -m http.server 8000 -d _build/html
 
 - **GitHub Issues**: Bug reports and feature requests
 - **GitHub Discussions**: General questions and ideas
-- **Email**: [team@arabic-nlp.org](mailto:team@arabic-nlp.org)
-- **Discord**: [Arabic NLP Community](https://discord.gg/arabic-nlp) (coming soon)
+- **GitHub Issues**: [Project Issues](https://github.com/artaasd95/arabic-qwen-base-finetuning/issues)
+- **GitHub Discussions**: [Project Discussions](https://github.com/artaasd95/arabic-qwen-base-finetuning/discussions)
 
 ### Getting Help
 
@@ -425,10 +425,10 @@ If you have any questions about contributing, please:
 1. Check this guide and the [FAQ](docs/FAQ.md)
 2. Search [existing discussions](https://github.com/artaasd95/arabic-qwen-base-finetuning/discussions)
 3. Create a new discussion or issue
-4. Contact us at [team@arabic-nlp.org](mailto:team@arabic-nlp.org)
+4. Create a GitHub issue or discussion
 
 ---
 
 **Thank you for contributing to Arabic Qwen Base Fine-tuning! 🙏**
 
-Your contributions help advance Arabic NLP research and make these tools accessible to the broader community.
+Your contributions help advance Arabic language processing research and make these tools accessible to the broader community.
