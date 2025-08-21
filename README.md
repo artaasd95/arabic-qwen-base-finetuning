@@ -44,7 +44,7 @@ A comprehensive framework for fine-tuning Qwen models on Arabic datasets using v
 
 ```bash
 # Clone the repository
-git clone https://github.com/arabic-nlp/arabic-qwen-base-finetuning.git
+git clone https://github.com/artaasd95/arabic-qwen-base-finetuning.git
 cd arabic-qwen-base-finetuning
 
 # Create virtual environment
@@ -501,7 +501,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ```bash
 # Clone and setup
-git clone https://github.com/arabic-nlp/arabic-qwen-base-finetuning.git
+git clone https://github.com/artaasd95/arabic-qwen-base-finetuning.git
 cd arabic-qwen-base-finetuning
 
 # Install development dependencies
@@ -542,8 +542,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 - **Documentation**: [https://arabic-qwen-base-finetuning.readthedocs.io/](https://arabic-qwen-base-finetuning.readthedocs.io/)
-- **Issues**: [GitHub Issues](https://github.com/arabic-nlp/arabic-qwen-base-finetuning/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/arabic-nlp/arabic-qwen-base-finetuning/discussions)
+- **Issues**: [GitHub Issues](https://github.com/artaasd95/arabic-qwen-base-finetuning/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/artaasd95/arabic-qwen-base-finetuning/discussions)
 - **Email**: team@arabic-nlp.org
 
 ## 🗺️ Roadmap

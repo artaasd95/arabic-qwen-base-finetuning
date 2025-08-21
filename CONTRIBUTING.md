@@ -34,9 +34,9 @@ This project and everyone participating in it is governed by our [Code of Conduc
 
 ### Before You Start
 
-1. **Check existing issues**: Look through [existing issues](https://github.com/arabic-nlp/arabic-qwen-base-finetuning/issues) to see if your idea or bug has already been reported
+1. **Check existing issues**: Look through [existing issues](https://github.com/artaasd95/arabic-qwen-base-finetuning/issues) to see if your idea or bug has already been reported
 2. **Read the documentation**: Familiarize yourself with the project structure and goals
-3. **Join the discussion**: Participate in [GitHub Discussions](https://github.com/arabic-nlp/arabic-qwen-base-finetuning/discussions) to get feedback on your ideas
+3. **Join the discussion**: Participate in [GitHub Discussions](https://github.com/artaasd95/arabic-qwen-base-finetuning/discussions) to get feedback on your ideas
 
 ## 🛠️ Development Setup
 
@@ -423,7 +423,7 @@ By contributing to this project, you agree that your contributions will be licen
 If you have any questions about contributing, please:
 
 1. Check this guide and the [FAQ](docs/FAQ.md)
-2. Search [existing discussions](https://github.com/arabic-nlp/arabic-qwen-base-finetuning/discussions)
+2. Search [existing discussions](https://github.com/artaasd95/arabic-qwen-base-finetuning/discussions)
 3. Create a new discussion or issue
 4. Contact us at [team@arabic-nlp.org](mailto:team@arabic-nlp.org)
 

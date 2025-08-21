@@ -186,4 +186,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-*For more information, visit our [documentation](docs/) or [GitHub repository](https://github.com/arabic-nlp/arabic-qwen-base-finetuning).*
+*For more information, visit our [documentation](docs/) or [GitHub repository](https://github.com/artaasd95/arabic-qwen-base-finetuning).*

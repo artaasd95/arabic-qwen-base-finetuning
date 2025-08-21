@@ -278,11 +278,11 @@ all = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/arabic-nlp/arabic-qwen-base-finetuning"
-Documentation = "https://arabic-qwen-base-finetuning.readthedocs.io"
-Repository = "https://github.com/arabic-nlp/arabic-qwen-base-finetuning"
-"Bug Tracker" = "https://github.com/arabic-nlp/arabic-qwen-base-finetuning/issues"
-Changelog = "https://github.com/arabic-nlp/arabic-qwen-base-finetuning/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/artaasd95/arabic-qwen-base-finetuning"
+Documentation = "https://arabic-qwen-base-finetuning.readthedocs.io/"
+Repository = "https://github.com/artaasd95/arabic-qwen-base-finetuning"
+"Bug Tracker" = "https://github.com/artaasd95/arabic-qwen-base-finetuning/issues"
+Changelog = "https://github.com/artaasd95/arabic-qwen-base-finetuning/blob/main/CHANGELOG.md"
 "Funding" = "https://github.com/sponsors/arabic-nlp"
 
 [project.scripts]

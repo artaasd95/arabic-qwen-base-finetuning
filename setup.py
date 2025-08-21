@@ -175,10 +175,10 @@ setup(
     long_description_content_type="text/markdown",
     author="Arabic NLP Team",
     author_email="team@arabic-nlp.org",
-    url="https://github.com/arabic-nlp/arabic-qwen-base-finetuning",
+    url="https://github.com/artaasd95/arabic-qwen-base-finetuning",
     project_urls={
-        "Bug Reports": "https://github.com/arabic-nlp/arabic-qwen-base-finetuning/issues",
-        "Source": "https://github.com/arabic-nlp/arabic-qwen-base-finetuning",
+        "Bug Reports": "https://github.com/artaasd95/arabic-qwen-base-finetuning/issues",
+        "Source": "https://github.com/artaasd95/arabic-qwen-base-finetuning",
         "Documentation": "https://arabic-qwen-base-finetuning.readthedocs.io/",
     },
     packages=find_packages(exclude=["tests", "tests.*", "notebooks", "scripts"]),
@@ -242,8 +242,8 @@ print("""
    4. Run training: arabic-qwen-train --config config/sft_config.yaml
 
 📖 Documentation: https://arabic-qwen-base-finetuning.readthedocs.io/
-🐛 Issues: https://github.com/arabic-nlp/arabic-qwen-base-finetuning/issues
-💬 Discussions: https://github.com/arabic-nlp/arabic-qwen-base-finetuning/discussions
+🐛 Issues: https://github.com/artaasd95/arabic-qwen-base-finetuning/issues
+💬 Discussions: https://github.com/artaasd95/arabic-qwen-base-finetuning/discussions
 
 Happy fine-tuning! 🚀
 """)

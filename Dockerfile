@@ -258,9 +258,9 @@ ARG VERSION
 LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.name="Arabic Qwen Base Fine-tuning" \
       org.label-schema.description="Framework for fine-tuning Qwen models on Arabic datasets" \
-      org.label-schema.url="https://github.com/arabic-nlp/arabic-qwen-base-finetuning" \
+      org.label-schema.url="https://github.com/artaasd95/arabic-qwen-base-finetuning" \
       org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.vcs-url="https://github.com/arabic-nlp/arabic-qwen-base-finetuning" \
+      org.label-schema.vcs-url="https://github.com/artaasd95/arabic-qwen-base-finetuning" \
       org.label-schema.vendor="Arabic NLP Team" \
       org.label-schema.version=$VERSION \
       org.label-schema.schema-version="1.0" \
