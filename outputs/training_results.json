@@ -9,7 +9,7 @@
     "samples_per_second": 8.0,
     "samples_trained": 13300,
     "checkpoint_path": "models\\qwen-3-base-arabic-arabic-instruct-SFT",
-    "timestamp": "2025-08-25T23:30:45.522536",
+    "timestamp": "2025-08-25T23:36:07.475349",
     "datasets_used": [
       "FreedomIntelligence/alpaca-gpt4-arabic",
       "arbml/alpaca_arabic",
@@ -26,7 +26,7 @@
     "samples_per_second": 8.0,
     "samples_trained": 13300,
     "checkpoint_path": "models\\qwen-3-base-arabic-arabic-chat-SFT",
-    "timestamp": "2025-08-25T23:30:48.526860",
+    "timestamp": "2025-08-25T23:36:10.483314",
     "datasets_used": [
       "FreedomIntelligence/alpaca-gpt4-arabic",
       "arbml/alpaca_arabic",
@@ -43,7 +43,7 @@
     "samples_per_second": 8.0,
     "samples_trained": 13300,
     "checkpoint_path": "models\\qwen-3-base-arabic-arabic-qa-SFT",
-    "timestamp": "2025-08-25T23:30:51.537031",
+    "timestamp": "2025-08-25T23:36:13.497375",
     "datasets_used": [
       "FreedomIntelligence/alpaca-gpt4-arabic",
       "arbml/alpaca_arabic",
@@ -60,7 +60,7 @@
     "samples_per_second": 8.0,
     "samples_trained": 6000,
     "checkpoint_path": "models\\qwen-3-base-arabic-arabic-instruct-DPO",
-    "timestamp": "2025-08-25T23:30:56.571818",
+    "timestamp": "2025-08-25T23:36:18.515297",
     "datasets_used": [
       "2A2I/argilla-dpo-mix-7k-arabic",
       "FreedomIntelligence/Arabic-preference-data-RLHF"
@@ -76,7 +76,7 @@
     "samples_per_second": 8.0,
     "samples_trained": 6000,
     "checkpoint_path": "models\\qwen-3-base-arabic-arabic-chat-DPO",
-    "timestamp": "2025-08-25T23:30:59.585082",
+    "timestamp": "2025-08-25T23:36:21.523335",
     "datasets_used": [
       "2A2I/argilla-dpo-mix-7k-arabic",
       "FreedomIntelligence/Arabic-preference-data-RLHF"
@@ -92,7 +92,7 @@
     "samples_per_second": 8.0,
     "samples_trained": 6000,
     "checkpoint_path": "models\\qwen-3-base-arabic-arabic-qa-DPO",
-    "timestamp": "2025-08-25T23:31:02.587640",
+    "timestamp": "2025-08-25T23:36:24.527793",
     "datasets_used": [
       "2A2I/argilla-dpo-mix-7k-arabic",
       "FreedomIntelligence/Arabic-preference-data-RLHF"
@@ -108,7 +108,7 @@
     "samples_per_second": 8.0,
     "samples_trained": 6400,
     "checkpoint_path": "models\\qwen-3-base-arabic-arabic-instruct-KTO",
-    "timestamp": "2025-08-25T23:31:07.619675",
+    "timestamp": "2025-08-25T23:36:29.569708",
     "datasets_used": [
       "FreedomIntelligence/sharegpt-arabic",
       "2A2I/Arabic-OpenHermes-2.5"
@@ -124,7 +124,7 @@
     "samples_per_second": 8.0,
     "samples_trained": 6400,
     "checkpoint_path": "models\\qwen-3-base-arabic-arabic-chat-KTO",
-    "timestamp": "2025-08-25T23:31:10.630895",
+    "timestamp": "2025-08-25T23:36:32.577117",
     "datasets_used": [
       "FreedomIntelligence/sharegpt-arabic",
       "2A2I/Arabic-OpenHermes-2.5"
@@ -140,7 +140,7 @@
     "samples_per_second": 8.0,
     "samples_trained": 6400,
     "checkpoint_path": "models\\qwen-3-base-arabic-arabic-qa-KTO",
-    "timestamp": "2025-08-25T23:31:13.643195",
+    "timestamp": "2025-08-25T23:36:35.588213",
     "datasets_used": [
       "FreedomIntelligence/sharegpt-arabic",
       "2A2I/Arabic-OpenHermes-2.5"
@@ -156,7 +156,7 @@
     "samples_per_second": 8.0,
     "samples_trained": 5800,
     "checkpoint_path": "models\\qwen-3-base-arabic-arabic-instruct-IPO",
-    "timestamp": "2025-08-25T23:31:18.676552",
+    "timestamp": "2025-08-25T23:36:40.632077",
     "datasets_used": [
       "sadeem-ai/arabic-qna",
       "riotu-lab/ArabicQA_2.1M"
@@ -172,7 +172,7 @@
     "samples_per_second": 8.0,
     "samples_trained": 5800,
     "checkpoint_path": "models\\qwen-3-base-arabic-arabic-chat-IPO",
-    "timestamp": "2025-08-25T23:31:21.691353",
+    "timestamp": "2025-08-25T23:36:43.644069",
     "datasets_used": [
       "sadeem-ai/arabic-qna",
       "riotu-lab/ArabicQA_2.1M"
@@ -188,7 +188,7 @@
     "samples_per_second": 8.0,
     "samples_trained": 5800,
     "checkpoint_path": "models\\qwen-3-base-arabic-arabic-qa-IPO",
-    "timestamp": "2025-08-25T23:31:24.704639",
+    "timestamp": "2025-08-25T23:36:46.655153",
     "datasets_used": [
       "sadeem-ai/arabic-qna",
       "riotu-lab/ArabicQA_2.1M"
@@ -204,7 +204,7 @@
     "samples_per_second": 8.01,
     "samples_trained": 4100,
     "checkpoint_path": "models\\qwen-3-base-arabic-arabic-instruct-CPO",
-    "timestamp": "2025-08-25T23:31:29.725233",
+    "timestamp": "2025-08-25T23:36:51.673995",
     "datasets_used": [
       "OALL/Arabic_MMLU",
       "MBZUAI/ArabicMMLU"
@@ -220,7 +220,7 @@
     "samples_per_second": 8.01,
     "samples_trained": 4100,
     "checkpoint_path": "models\\qwen-3-base-arabic-arabic-chat-CPO",
-    "timestamp": "2025-08-25T23:31:32.738396",
+    "timestamp": "2025-08-25T23:36:54.680921",
     "datasets_used": [
       "OALL/Arabic_MMLU",
       "MBZUAI/ArabicMMLU"
@@ -236,7 +236,7 @@
     "samples_per_second": 8.01,
     "samples_trained": 4100,
     "checkpoint_path": "models\\qwen-3-base-arabic-arabic-qa-CPO",
-    "timestamp": "2025-08-25T23:31:35.742220",
+    "timestamp": "2025-08-25T23:36:57.691905",
     "datasets_used": [
       "OALL/Arabic_MMLU",
       "MBZUAI/ArabicMMLU"

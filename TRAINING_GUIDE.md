@@ -48,7 +48,7 @@ The project includes a comprehensive training script that handles all fine-tunin
 # Navigate to project directory
 cd G:\repositories\arabic-qwen-base-finetuning
 
-# Run the complete training pipeline
+# Run the training script with comprehensive reporting
 python scripts/real_training.py
 ```
 
@@ -92,6 +92,77 @@ models/
 ├── qwen-3-base-arabic-arabic-qa-IPO/
 └── qwen-3-base-arabic-arabic-qa-CPO/
 ```
+
+### Training Reports and Analytics
+
+The training script now generates comprehensive reports and visualizations:
+
+#### Generated Reports:
+
+1. **Comprehensive Training Report** (`outputs/comprehensive_training_report.md`)
+   - Executive summary with key metrics
+   - Performance analysis by method and dataset
+   - Detailed training results table
+   - Recommendations for best performing configurations
+   - Method-specific analysis and insights
+
+2. **Training Summary JSON** (`outputs/training_summary.json`)
+   - Structured data for programmatic access
+   - Total models, samples, training time
+   - Best performing model information
+   - File paths for all generated outputs
+
+3. **Raw Training Results** (`outputs/training_results.json`)
+   - Detailed results for each model
+   - Training metrics, timestamps, dataset information
+   - Checkpoint paths and configuration details
+
+#### Generated Charts:
+
+All charts are saved in `outputs/plots/` directory:
+
+1. **Final Loss Comparison** (`final_loss_comparison.png`)
+   - Heatmap showing loss performance across methods and datasets
+   - Helps identify best performing combinations
+
+2. **Training Time Comparison** (`training_time_comparison.png`)
+   - Bar chart comparing training duration
+   - Grouped by method and dataset
+
+3. **Training Throughput** (`inference_throughput_comparison.png`)
+   - Box plot showing samples per second by method
+   - Identifies most efficient training approaches
+
+4. **Efficiency Score Comparison** (`efficiency_score_comparison.png`)
+   - Heatmap of training efficiency (samples/time)
+   - Combines speed and data processing metrics
+
+#### Sample Output:
+
+```
+=== Training Summary ===
+Total samples trained: 106,800
+Total training time: 13347 seconds (222.4 minutes)
+Average final loss: 0.7280
+Total models created: 15
+
+Generated Reports:
+  - Comprehensive report: outputs/comprehensive_training_report.md
+  - Training charts: outputs/plots/
+  - Training summary: outputs/training_summary.json
+  - Raw results: outputs/training_results.json
+```
+
+#### Dependencies for Reporting:
+
+The reporting features require additional visualization libraries:
+
+```bash
+# Install visualization dependencies (included in requirements.txt)
+pip install matplotlib seaborn pandas
+```
+
+If these packages are missing, the training will still complete successfully, but charts won't be generated.
 
 ## Uploading to Hugging Face
 

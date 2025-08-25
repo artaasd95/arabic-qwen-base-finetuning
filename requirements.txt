@@ -29,6 +29,10 @@ pandas>=2.0.0
 scipy>=1.10.0
 scikit-learn>=1.3.0
 
+# Visualization and Reporting
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
 # Text Processing and Arabic Support
 nltk>=3.8.0
 spacy>=3.6.0

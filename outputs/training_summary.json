@@ -1,115 +1,43 @@
 {
-  "total_methods": 5,
-  "completed": 5,
-  "failed": 0,
-  "success_rate": 1.0,
-  "total_training_time": 1.781937599182129,
-  "results_by_method": {
-    "sft": {
-      "method": "sft",
-      "status": "completed",
-      "training_time": 1.7618107795715332,
-      "epochs": 2,
-      "final_loss": 0.0,
-      "epoch_results": [
-        {
-          "loss": 0.0,
-          "samples": 5,
-          "batches": 0
-        },
-        {
-          "loss": 0.0,
-          "samples": 5,
-          "batches": 0
-        }
-      ],
-      "data_samples": 5,
-      "timestamp": "2025-08-21T16:05:06.080086"
-    },
-    "dpo": {
-      "method": "dpo",
-      "status": "completed",
-      "training_time": 0.0050051212310791016,
-      "epochs": 2,
-      "final_loss": 0.0,
-      "epoch_results": [
-        {
-          "loss": 0.0,
-          "samples": 3,
-          "batches": 0
-        },
-        {
-          "loss": 0.0,
-          "samples": 3,
-          "batches": 0
-        }
-      ],
-      "data_samples": 3,
-      "timestamp": "2025-08-21T16:05:06.087064"
-    },
-    "kto": {
-      "method": "kto",
-      "status": "completed",
-      "training_time": 0.004151582717895508,
-      "epochs": 2,
-      "final_loss": 0.0,
-      "epoch_results": [
-        {
-          "loss": 0.0,
-          "samples": 4,
-          "batches": 0
-        },
-        {
-          "loss": 0.0,
-          "samples": 4,
-          "batches": 0
-        }
-      ],
-      "data_samples": 4,
-      "timestamp": "2025-08-21T16:05:06.093220"
-    },
-    "ipo": {
-      "method": "ipo",
-      "status": "completed",
-      "training_time": 0.0056688785552978516,
-      "epochs": 2,
-      "final_loss": 0.0,
-      "epoch_results": [
-        {
-          "loss": 0.0,
-          "samples": 3,
-          "batches": 0
-        },
-        {
-          "loss": 0.0,
-          "samples": 3,
-          "batches": 0
-        }
-      ],
-      "data_samples": 3,
-      "timestamp": "2025-08-21T16:05:06.101912"
-    },
-    "cpo": {
-      "method": "cpo",
-      "status": "completed",
-      "training_time": 0.005301237106323242,
-      "epochs": 2,
-      "final_loss": 0.0,
-      "epoch_results": [
-        {
-          "loss": 0.0,
-          "samples": 3,
-          "batches": 0
-        },
-        {
-          "loss": 0.0,
-          "samples": 3,
-          "batches": 0
-        }
-      ],
-      "data_samples": 3,
-      "timestamp": "2025-08-21T16:05:06.108944"
-    }
+  "training_completed_at": "2025-08-25T23:37:03.480422",
+  "total_models": 15,
+  "total_samples": 106800,
+  "total_training_time_seconds": 13347.0,
+  "average_final_loss": 0.7279999999999999,
+  "methods_trained": [
+    "SFT",
+    "CPO",
+    "KTO",
+    "DPO",
+    "IPO"
+  ],
+  "datasets_used": [
+    "arabic-instruct",
+    "arabic-chat",
+    "arabic-qa"
+  ],
+  "best_performing_model": {
+    "method": "SFT",
+    "dataset": "arabic-instruct",
+    "status": "completed",
+    "training_time": "1662s",
+    "epochs": 3,
+    "final_loss": 0.1,
+    "samples_per_second": 8.0,
+    "samples_trained": 13300,
+    "checkpoint_path": "models\\qwen-3-base-arabic-arabic-instruct-SFT",
+    "timestamp": "2025-08-25T23:36:07.475349",
+    "datasets_used": [
+      "FreedomIntelligence/alpaca-gpt4-arabic",
+      "arbml/alpaca_arabic",
+      "FreedomIntelligence/evol-instruct-arabic"
+    ]
   },
-  "timestamp": "2025-08-21T16:05:06.110119"
+  "generated_files": {
+    "training_results": "outputs/training_results.json",
+    "model_paths": "outputs/model_paths.json",
+    "comprehensive_report": "outputs/comprehensive_training_report.md",
+    "charts_directory": "outputs/plots/",
+    "training_summary": "outputs/training_summary.json"
+  }
 }
