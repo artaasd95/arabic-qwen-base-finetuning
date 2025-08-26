@@ -19,7 +19,7 @@ class BaseConfig:
     """
     
     # Model Configuration
-    model_name: str = field(default_factory=lambda: os.getenv("MODEL_NAME", "Qwen/Qwen2.5-0.5B"))
+    model_name: str = field(default_factory=lambda: os.getenv("MODEL_NAME", "Qwen/Qwen3-1.7B"))
     model_path: Optional[str] = field(default_factory=lambda: os.getenv("MODEL_PATH"))
     tokenizer_name: Optional[str] = field(default_factory=lambda: os.getenv("TOKENIZER_NAME"))
     

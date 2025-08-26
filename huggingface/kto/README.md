@@ -11,7 +11,7 @@ tags:
 - text-generation
 - conversational
 - preference-learning
-base_model: Qwen/Qwen2.5-0.5B
+base_model: Qwen/Qwen3-1.7B
 model-index:
 - name: arabic-qwen-kto
   results:
@@ -38,7 +38,7 @@ model-index:
 
 # Arabic Qwen KTO Model
 
-This model is a fine-tuned version of [Qwen/Qwen2.5-0.5B](https://huggingface.co/Qwen/Qwen2.5-0.5B) using Kahneman-Tversky Optimization (KTO) on Arabic preference data.
+This model is a fine-tuned version of [Qwen/Qwen3-1.7B](https://huggingface.co/Qwen/Qwen3-1.7B) using Kahneman-Tversky Optimization (KTO) on Arabic preference data.
 
 ## Model Details
 
@@ -48,13 +48,13 @@ This model is a fine-tuned version of [Qwen/Qwen2.5-0.5B](https://huggingface.co
 - **Model type:** Causal Language Model
 - **Language(s):** Arabic, English
 - **License:** Apache 2.0
-- **Finetuned from model:** Qwen/Qwen2.5-0.5B
+- **Finetuned from model:** Qwen/Qwen3-1.7B
 - **Training method:** Kahneman-Tversky Optimization (KTO)
 
 ### Model Sources
 
 - **Repository:** [https://github.com/artaasd95/arabic-qwen-base-finetuning](https://github.com/artaasd95/arabic-qwen-base-finetuning)
-- **Base Model:** [Qwen/Qwen2.5-0.5B](https://huggingface.co/Qwen/Qwen2.5-0.5B)
+- **Base Model:** [Qwen/Qwen3-1.7B](https://huggingface.co/Qwen/Qwen3-1.7B)
 - **Paper:** [KTO: Model Alignment as Prospect Theory](https://arxiv.org/abs/2402.01306)
 
 ## Uses

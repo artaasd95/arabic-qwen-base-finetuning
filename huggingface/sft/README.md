@@ -10,7 +10,7 @@ tags:
 - supervised-fine-tuning
 - text-generation
 - conversational
-base_model: Qwen/Qwen2.5-0.5B
+base_model: Qwen/Qwen3-1.7B
 model-index:
 - name: arabic-qwen-sft
   results:
@@ -34,7 +34,7 @@ model-index:
 
 # Arabic Qwen SFT Model
 
-This model is a fine-tuned version of [Qwen/Qwen2.5-0.5B](https://huggingface.co/Qwen/Qwen2.5-0.5B) using Supervised Fine-Tuning (SFT) on Arabic conversational data.
+This model is a fine-tuned version of [Qwen/Qwen3-1.7B](https://huggingface.co/Qwen/Qwen3-1.7B) using Supervised Fine-Tuning (SFT) on Arabic conversational data.
 
 ## Model Details
 
@@ -44,13 +44,13 @@ This model is a fine-tuned version of [Qwen/Qwen2.5-0.5B](https://huggingface.co
 - **Model type:** Causal Language Model
 - **Language(s):** Arabic, English
 - **License:** Apache 2.0
-- **Finetuned from model:** Qwen/Qwen2.5-0.5B
+- **Finetuned from model:** Qwen/Qwen3-1.7B
 - **Training method:** Supervised Fine-Tuning (SFT)
 
 ### Model Sources
 
 - **Repository:** [https://github.com/artaasd95/arabic-qwen-base-finetuning](https://github.com/artaasd95/arabic-qwen-base-finetuning)
-- **Base Model:** [Qwen/Qwen2.5-0.5B](https://huggingface.co/Qwen/Qwen2.5-0.5B)
+- **Base Model:** [Qwen/Qwen3-1.7B](https://huggingface.co/Qwen/Qwen3-1.7B)
 
 ## Uses
 

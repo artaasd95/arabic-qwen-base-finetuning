@@ -84,7 +84,7 @@ def test_model_loading():
     try:
         from transformers import AutoTokenizer, AutoModelForCausalLM
         
-        model_name = "Qwen/Qwen2.5-0.5B"
+        model_name = "Qwen/Qwen3-1.7B"
         print(f"Testing model: {model_name}")
         
         # Test tokenizer loading

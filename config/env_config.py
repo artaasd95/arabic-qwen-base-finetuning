@@ -178,9 +178,9 @@ def create_sample_env_file(output_path: Union[str, Path] = ".env.sample"):
 # =============================================================================
 
 # Model Configuration
-MODEL_NAME=Qwen/Qwen2.5-0.5B
+MODEL_NAME=Qwen/Qwen3-1.7B
 # MODEL_PATH=./models/qwen-0.5b  # Optional: local model path
-# TOKENIZER_NAME=Qwen/Qwen2.5-0.5B  # Optional: custom tokenizer
+# TOKENIZER_NAME=Qwen/Qwen3-1.7B  # Optional: custom tokenizer
 
 # Output and Logging
 OUTPUT_DIR=./checkpoints
@@ -255,7 +255,7 @@ DPO_LOSS_TYPE=sigmoid
 DPO_LABEL_SMOOTHING=0.0
 
 # Reference Model
-# DPO_REF_MODEL_NAME=Qwen/Qwen2.5-0.5B
+# DPO_REF_MODEL_NAME=Qwen/Qwen3-1.7B
 # DPO_REF_MODEL_PATH=./models/qwen-0.5b-sft
 
 # Data Processing
@@ -286,7 +286,7 @@ KTO_DESIRABLE_WEIGHT=1.0
 KTO_UNDESIRABLE_WEIGHT=1.0
 
 # Reference Model
-# KTO_REF_MODEL_NAME=Qwen/Qwen2.5-0.5B
+# KTO_REF_MODEL_NAME=Qwen/Qwen3-1.7B
 # KTO_REF_MODEL_PATH=./models/qwen-0.5b-sft
 
 # Data Processing
@@ -317,7 +317,7 @@ IPO_TAU=0.1
 IPO_LABEL_SMOOTHING=0.0
 
 # Reference Model
-# IPO_REF_MODEL_NAME=Qwen/Qwen2.5-0.5B
+# IPO_REF_MODEL_NAME=Qwen/Qwen3-1.7B
 # IPO_REF_MODEL_PATH=./models/qwen-0.5b-sft
 
 # Data Processing
@@ -350,7 +350,7 @@ CPO_ALPHA=1.0
 CPO_SIMPO_GAMMA=0.5
 
 # Reference Model
-# CPO_REF_MODEL_NAME=Qwen/Qwen2.5-0.5B
+# CPO_REF_MODEL_NAME=Qwen/Qwen3-1.7B
 # CPO_REF_MODEL_PATH=./models/qwen-0.5b-sft
 
 # Data Processing

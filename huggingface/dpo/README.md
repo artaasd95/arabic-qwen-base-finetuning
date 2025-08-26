@@ -11,7 +11,7 @@ tags:
 - text-generation
 - conversational
 - rlhf
-base_model: Qwen/Qwen2.5-0.5B
+base_model: Qwen/Qwen3-1.7B
 model-index:
 - name: arabic-qwen-dpo
   results:
@@ -38,7 +38,7 @@ model-index:
 
 # Arabic Qwen DPO Model
 
-This model is a fine-tuned version of [Qwen/Qwen2.5-0.5B](https://huggingface.co/Qwen/Qwen2.5-0.5B) using Direct Preference Optimization (DPO) on Arabic preference data.
+This model is a fine-tuned version of [Qwen/Qwen3-1.7B](https://huggingface.co/Qwen/Qwen3-1.7B) using Direct Preference Optimization (DPO) on Arabic preference data.
 
 ## Model Details
 
@@ -48,13 +48,13 @@ This model is a fine-tuned version of [Qwen/Qwen2.5-0.5B](https://huggingface.co
 - **Model type:** Causal Language Model
 - **Language(s):** Arabic, English
 - **License:** Apache 2.0
-- **Finetuned from model:** Qwen/Qwen2.5-0.5B
+- **Finetuned from model:** Qwen/Qwen3-1.7B
 - **Training method:** Direct Preference Optimization (DPO)
 
 ### Model Sources
 
 - **Repository:** [https://github.com/artaasd95/arabic-qwen-base-finetuning](https://github.com/artaasd95/arabic-qwen-base-finetuning)
-- **Base Model:** [Qwen/Qwen2.5-0.5B](https://huggingface.co/Qwen/Qwen2.5-0.5B)
+- **Base Model:** [Qwen/Qwen3-1.7B](https://huggingface.co/Qwen/Qwen3-1.7B)
 - **Paper:** [Direct Preference Optimization](https://arxiv.org/abs/2305.18290)
 
 ## Uses

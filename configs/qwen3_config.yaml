@@ -1,10 +1,10 @@
-# Qwen3-0.6B Configuration for Arabic Fine-tuning
+# Qwen3-1.7B Configuration for Arabic Fine-tuning
 # Optimized for lightweight training with CUDA support
 
 model:
-  name: "Qwen/Qwen2.5-0.5B"  # Using closest available model
-  model_type: "qwen"
-  tokenizer_name: "Qwen/Qwen2.5-0.5B"
+  name: "Qwen/Qwen3-1.7B"  # Lightest Qwen 3 model
+  model_type: "qwen3"
+  tokenizer_name: "Qwen/Qwen3-1.7B"
   max_length: 2048
   trust_remote_code: true
   torch_dtype: "bfloat16"  # Memory efficient

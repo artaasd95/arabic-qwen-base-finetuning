@@ -11,7 +11,7 @@ tags:
 - text-generation
 - conversational
 - preference-learning
-base_model: Qwen/Qwen2.5-0.5B
+base_model: Qwen/Qwen3-1.7B
 model-index:
 - name: arabic-qwen-ipo
   results:
@@ -38,7 +38,7 @@ model-index:
 
 # Arabic Qwen IPO Model
 
-This model is a fine-tuned version of [Qwen/Qwen2.5-0.5B](https://huggingface.co/Qwen/Qwen2.5-0.5B) using Identity Preference Optimization (IPO) on Arabic preference data.
+This model is a fine-tuned version of [Qwen/Qwen3-1.7B](https://huggingface.co/Qwen/Qwen3-1.7B) using Identity Preference Optimization (IPO) on Arabic preference data.
 
 ## Model Details
 
@@ -48,13 +48,13 @@ This model is a fine-tuned version of [Qwen/Qwen2.5-0.5B](https://huggingface.co
 - **Model type:** Causal Language Model
 - **Language(s):** Arabic, English
 - **License:** Apache 2.0
-- **Finetuned from model:** Qwen/Qwen2.5-0.5B
+- **Finetuned from model:** Qwen/Qwen3-1.7B
 - **Training method:** Identity Preference Optimization (IPO)
 
 ### Model Sources
 
 - **Repository:** [https://github.com/artaasd95/arabic-qwen-base-finetuning](https://github.com/artaasd95/arabic-qwen-base-finetuning)
-- **Base Model:** [Qwen/Qwen2.5-0.5B](https://huggingface.co/Qwen/Qwen2.5-0.5B)
+- **Base Model:** [Qwen/Qwen3-1.7B](https://huggingface.co/Qwen/Qwen3-1.7B)
 - **Paper:** [A General Theoretical Paradigm to Understand Learning from Human Preferences](https://arxiv.org/abs/2310.12036)
 
 ## Uses
