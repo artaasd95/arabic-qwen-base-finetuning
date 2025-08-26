@@ -1,0 +1,20 @@
+# Hugging Face Model Uploader Requirements
+# Install with: pip install -r requirements.txt
+
+# Core dependencies
+huggingface-hub>=0.20.0
+transformers>=4.36.0
+torch>=2.0.0
+python-dotenv>=1.0.0
+
+# Utility dependencies
+requests>=2.31.0
+tqdm>=4.65.0
+typing-extensions>=4.8.0
+
+# Optional dependencies for enhanced functionality
+# Uncomment if needed:
+# accelerate>=0.25.0  # For faster model loading
+# datasets>=2.15.0    # For dataset handling
+# tokenizers>=0.15.0  # For tokenizer operations
+# safetensors>=0.4.0  # For safe tensor serialization

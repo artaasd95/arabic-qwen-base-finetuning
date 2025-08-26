@@ -198,6 +198,60 @@ cython_debug/
 #  Cursor is an AI-powered code editor. `.cursorignore` specifies files/directories to
 #  exclude from AI features like autocomplete and code analysis. Recommended for sensitive data
 #  refer to https://docs.cursor.com/context/ignore-files
+
+# =============================================================================
+# PROJECT SPECIFIC - ARABIC QWEN FINETUNING
+# =============================================================================
+
+# Hugging Face Builder environment files
+huggingface_builder/.env
+huggingface_builder/.env.*
+huggingface_builder/temp_repos/
+huggingface_builder/logs/
+huggingface_builder/*.log
+
+# Training outputs and models
+outputs/models/
+outputs/checkpoints/
+outputs/logs/
+outputs/*.log
+
+# Temporary upload files
+upload_status.json
+failed_uploads.json
+validation_report.json
+
+# Model cache and downloads
+models_cache/
+downloaded_models/
+.cache/huggingface/
+
+# Weights and Biases
+wandb/
+
+# TensorBoard logs
+runs/
+tensorboard_logs/
+
+# Large model files (if accidentally placed in repo)
+*.bin
+*.safetensors
+*.gguf
+*.ggml
+*.pt
+*.pth
+*.ckpt
+
+# Dataset files
+*.jsonl
+*.parquet
+*.arrow
+*.feather
+
+# Backup configurations
+*.yaml.bak
+*.json.bak
+*.py.bak
 .cursorignore
 .cursorindexingignore
 
