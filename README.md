@@ -298,6 +298,57 @@ print(f"BLEU Score: {results['bleu']:.2f}")
 print(f"ROUGE-L: {results['rouge_l']:.2f}")
 ```
 
+## 📊 Training Reports and Analytics
+
+The training script automatically generates comprehensive reports and visualizations to help you analyze model performance:
+
+### Generated Reports
+
+After running the training script, you'll find the following files in the `outputs/` directory:
+
+- **`comprehensive_training_report.md`**: Detailed markdown report with performance analysis
+- **`training_summary.json`**: Programmatic summary of training results
+- **`training_results.json`**: Raw training data and metrics
+- **`model_paths.json`**: Paths to all generated model checkpoints
+
+### Training Visualizations
+
+The `outputs/plots/` directory contains performance charts:
+
+- **`final_loss_comparison.png`**: Loss comparison across all methods and datasets
+- **`training_time_comparison.png`**: Training time analysis
+- **`inference_throughput_comparison.png`**: Samples per second performance
+- **`efficiency_score_comparison.png`**: Overall efficiency metrics
+
+### Accessing Reports
+
+```bash
+# Run the training script with comprehensive reporting
+python scripts/real_training.py
+
+# View the generated reports
+cat outputs/comprehensive_training_report.md
+cat outputs/training_summary.json
+
+# Open the plots directory
+ls outputs/plots/
+```
+
+### Sample Output Structure
+
+```
+outputs/
+├── comprehensive_training_report.md
+├── training_summary.json
+├── training_results.json
+├── model_paths.json
+└── plots/
+    ├── final_loss_comparison.png
+    ├── training_time_comparison.png
+    ├── inference_throughput_comparison.png
+    └── efficiency_score_comparison.png
+```
+
 ## 🔧 Advanced Usage
 
 ### Memory Optimization
