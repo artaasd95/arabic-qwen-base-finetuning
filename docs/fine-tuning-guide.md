@@ -44,6 +44,7 @@ This comprehensive guide covers the complete process of fine-tuning Qwen base mo
    - **DNO (Distributional Preference Optimization)**: Distribution-aware preference learning
    - **IPO (Identity Preference Optimization)**: Regularized preference optimization
    - **CPO (Conservative Preference Optimization)**: Safe preference alignment
+   - **SimPO (Simple Preference Optimization)**: Length-normalized preference optimization
 
 **Goal**: Train base model on Arabic instruction-response pairs  
 **Best For**: RTX 3060 12GB, foundation for preference optimization  
@@ -279,6 +280,41 @@ cpo_trainer = CPOTrainer(
 
 cpo_trainer.train()
 cpo_trainer.save_model("./arabic-cpo-final")
+```
+
+#### Method 5: Simple Preference Optimization (SimPO)
+**Best for**: Length-normalized preference optimization, improved response quality
+
+```python
+# SimPO Training Script
+from trl import SimPOTrainer
+
+# SimPO Configuration
+simpo_args = TrainingArguments(
+    output_dir="./arabic-simpo-model",
+    per_device_train_batch_size=1,
+    gradient_accumulation_steps=16,
+    learning_rate=1e-6,
+    num_train_epochs=1,
+    fp16=True,
+    save_steps=500,
+    logging_steps=10,
+    warmup_steps=100,
+)
+
+# Initialize SimPO Trainer
+simpo_trainer = SimPOTrainer(
+    model=model,
+    ref_model=None,
+    args=simpo_args,
+    train_dataset=dataset["train"],
+    tokenizer=tokenizer,
+    beta=2.0,  # SimPO regularization parameter
+    gamma_beta_ratio=0.5,  # Length normalization factor
+)
+
+simpo_trainer.train()
+simpo_trainer.save_model("./arabic-simpo-final")
 ```
 
 ### Pipeline 2: Domain-Specific Base Model Fine-tuning

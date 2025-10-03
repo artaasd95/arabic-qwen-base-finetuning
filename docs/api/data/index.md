@@ -48,6 +48,7 @@ src/data/
 | [DPO Loader](dpo_loader.md) | Direct Preference Optimization | Chosen/rejected pairs, length handling |
 | [KTO Loader](kto_loader.md) | Kahneman-Tversky Optimization | Binary feedback, desirable/undesirable |
 | [IPO Loader](ipo_loader.md) | Identity Preference Optimization | Length bias mitigation, identity mapping |
+| [Arabic Dialect Utils](arabic_dialect_utils.md) | Arabic dialect processing | Dialect detection, text augmentation, dataset processing |
 | [CPO Loader](cpo_loader.md) | Contrastive Preference Optimization | Multi-negative sampling, contrastive learning |
 
 ### Processing Components

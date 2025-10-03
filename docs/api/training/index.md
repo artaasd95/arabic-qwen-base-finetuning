@@ -11,6 +11,7 @@ The training system is built with a modular architecture that supports multiple 
 - **Kahneman-Tversky Optimization (KTO)**: Human feedback optimization
 - **Identity Preference Optimization (IPO)**: Length-bias aware preference learning
 - **Contrastive Preference Optimization (CPO)**: Multi-negative contrastive learning
+- **Simple Preference Optimization (SimPO)**: Length-normalized preference optimization
 
 ## Architecture
 
@@ -65,6 +66,7 @@ BaseTrainer
 | **KTO** | Binary feedback (desirable/undesirable) | Human feedback optimization | Works with simple feedback | May need more data |
 | **IPO** | Length-aware preferences | Mitigating length bias | Handles length bias well | More complex setup |
 | **CPO** | Multi-negative preferences | Contrastive learning | Rich negative sampling | Computationally intensive |
+| **SimPO** | Preference pairs with length normalization | Quality-focused preference learning | Improved response quality | Requires careful tuning |
 
 ## Method-Specific Documentation
 
@@ -581,3 +583,6 @@ For detailed API documentation, see:
 - [SFT Trainer API](sft_trainer.md)
 - [DPO Trainer API](dpo_trainer.md)
 - [Preference Trainer API](preference_trainer.md)
+- [CPO Trainer API](cpo_trainer.md)
+- [SimPO Trainer API](simpo_trainer.md)
+- [Model Merger API](model_merger.md)

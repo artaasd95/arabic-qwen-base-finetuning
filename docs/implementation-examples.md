@@ -10,9 +10,12 @@ This document provides complete, ready-to-run code examples for fine-tuning Qwen
 4. [KTO Implementation](#kto-implementation)
 5. [IPO Implementation](#ipo-implementation)
 6. [CPO Implementation](#cpo-implementation)
-7. [Complete Training Scripts](#complete-training-scripts)
-8. [Evaluation Examples](#evaluation-examples)
-9. [Inference Examples](#inference-examples)
+7. [SimPO Implementation](#simpo-implementation)
+8. [Model Merging Examples](#model-merging-examples)
+9. [Arabic Dialect Processing](#arabic-dialect-processing)
+10. [Complete Training Scripts](#complete-training-scripts)
+11. [Evaluation Examples](#evaluation-examples)
+12. [Inference Examples](#inference-examples)
 
 ## 🛠️ Environment Setup
 
@@ -598,6 +601,457 @@ class ArabicCPOTrainer:
         
         print(f"CPO training completed. Model saved to {self.output_dir}")
         return cpo_trainer
+```
+
+## 🎯 SimPO Implementation
+
+### Example 7: Simple Preference Optimization (SimPO)
+
+```python
+class ArabicSimPOTrainer:
+    def __init__(self, model_name: str = "Qwen/Qwen2.5-3B", output_dir: str = "./arabic-simpo-model"):
+        self.model_name = model_name
+        self.output_dir = output_dir
+        self.tokenizer = None
+        self.model = None
+        
+    def setup_model_and_tokenizer(self):
+        """Initialize model and tokenizer for SimPO training"""
+        print(f"Loading model for SimPO: {self.model_name}")
+        
+        # Load tokenizer
+        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+        if self.tokenizer.pad_token is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
+            
+        # Load model with FP16
+        self.model = AutoModelForCausalLM.from_pretrained(
+            self.model_name,
+            torch_dtype=torch.float16,
+            device_map="auto",
+            trust_remote_code=True
+        )
+        
+        print(f"Model loaded for SimPO. Parameters: {self.model.num_parameters():,}")
+        
+    def prepare_simpo_dataset(self, dataset_name: str = "HuggingFaceH4/ultrafeedback_binarized"):
+        """Prepare dataset for SimPO training with Arabic preference data"""
+        print(f"Loading preference dataset: {dataset_name}")
+        
+        # Load dataset
+        dataset = load_dataset(dataset_name)
+        
+        # Convert to Arabic preference format
+        def format_simpo_data(example):
+            # Extract prompt and responses
+            prompt = example.get("prompt", "")
+            chosen = example.get("chosen", "")
+            rejected = example.get("rejected", "")
+            
+            # Translate to Arabic format (in practice, use Arabic datasets)
+            arabic_prompt = f"### السؤال:\n{prompt}\n\n"
+            
+            return {
+                "prompt": arabic_prompt,
+                "chosen": f"### الإجابة المفضلة:\n{chosen}",
+                "rejected": f"### الإجابة المرفوضة:\n{rejected}"
+            }
+        
+        # Apply formatting
+        formatted_dataset = dataset.map(format_simpo_data)
+        
+        print(f"SimPO dataset prepared. Training samples: {len(formatted_dataset['train']):,}")
+        return formatted_dataset
+    
+    def train_simpo(self, dataset, epochs: int = 3, batch_size: int = 2, learning_rate: float = 1e-6):
+        """Train with SimPO (Simple Preference Optimization)"""
+        from src.training.simpo_trainer import SimPOTrainer, SimPOConfig
+        
+        # SimPO configuration
+        simpo_config = SimPOConfig(
+            output_dir=self.output_dir,
+            num_train_epochs=epochs,
+            per_device_train_batch_size=batch_size,
+            gradient_accumulation_steps=8,
+            learning_rate=learning_rate,
+            max_length=512,
+            max_prompt_length=256,
+            
+            # SimPO-specific parameters
+            beta=0.1,  # Length normalization parameter
+            gamma=1.0,  # Preference strength
+            length_penalty=0.1,  # Length penalty coefficient
+            
+            # Optimization settings
+            fp16=True,
+            gradient_checkpointing=True,
+            logging_steps=10,
+            save_steps=500,
+            eval_steps=500,
+            warmup_steps=100,
+            weight_decay=0.01,
+            
+            # Memory optimization
+            dataloader_pin_memory=False,
+            remove_unused_columns=False,
+        )
+        
+        # Initialize SimPO trainer
+        simpo_trainer = SimPOTrainer(
+            model=self.model,
+            args=simpo_config,
+            train_dataset=dataset["train"],
+            tokenizer=self.tokenizer,
+        )
+        
+        print("Starting SimPO training...")
+        simpo_trainer.train()
+        
+        simpo_trainer.save_model()
+        self.tokenizer.save_pretrained(self.output_dir)
+        
+        print(f"SimPO training completed. Model saved to {self.output_dir}")
+        return simpo_trainer
+
+# Usage example
+if __name__ == "__main__":
+    # Initialize SimPO trainer
+    simpo_trainer = ArabicSimPOTrainer(
+        model_name="./arabic-sft-model",  # Use SFT model as base
+        output_dir="./arabic-simpo-model"
+    )
+    
+    # Setup model
+    simpo_trainer.setup_model_and_tokenizer()
+    
+    # Prepare dataset
+    dataset = simpo_trainer.prepare_simpo_dataset()
+    
+    # Train with SimPO
+    trainer = simpo_trainer.train_simpo(dataset, epochs=2, batch_size=2)
+    
+    print("SimPO training pipeline completed!")
+```
+
+## 🔀 Model Merging Examples
+
+### Example 8: Advanced Model Merging
+
+```python
+class ArabicModelMerger:
+    def __init__(self):
+        self.merged_models = {}
+        
+    def weighted_merge_example(self):
+        """Example of weighted model merging"""
+        from src.training.model_merger import ModelMerger, MergeConfig
+        
+        # Configure weighted merging
+        config = MergeConfig(
+            strategy="weighted",
+            models=[
+                {
+                    "path": "./arabic-sft-model",
+                    "weight": 0.4,
+                    "name": "sft_base"
+                },
+                {
+                    "path": "./arabic-dpo-model", 
+                    "weight": 0.3,
+                    "name": "dpo_specialist"
+                },
+                {
+                    "path": "./arabic-simpo-model",
+                    "weight": 0.3,
+                    "name": "simpo_specialist"
+                }
+            ],
+            output_path="./merged-arabic-model",
+            options={
+                "normalize_weights": True,
+                "preserve_tokenizer": True,
+                "torch_dtype": "float16"
+            },
+            validation={
+                "run_tests": True,
+                "test_prompts": [
+                    "مرحبا، كيف يمكنني مساعدتك؟",
+                    "اشرح لي مفهوم الذكاء الاصطناعي",
+                    "ما هي أفضل طريقة لتعلم البرمجة؟"
+                ]
+            }
+        )
+        
+        # Perform merge
+        merger = ModelMerger(config)
+        merged_model = merger.merge()
+        
+        print("Weighted merge completed successfully!")
+        return merged_model
+    
+    def task_arithmetic_example(self):
+        """Example of task arithmetic merging"""
+        from src.training.model_merger import ModelMerger, MergeConfig
+        
+        # Configure task arithmetic
+        config = MergeConfig(
+            strategy="task_arithmetic",
+            base_model="./arabic-base-model",
+            models=[
+                {
+                    "path": "./arabic-chat-model",
+                    "weight": 1.0,
+                    "operation": "add",
+                    "name": "chat_enhancement"
+                },
+                {
+                    "path": "./arabic-formal-model",
+                    "weight": -0.5,
+                    "operation": "subtract", 
+                    "name": "formality_reduction"
+                }
+            ],
+            output_path="./casual-arabic-chat",
+            options={
+                "scaling_factor": 1.0,
+                "clamp_weights": True,
+                "clamp_range": [-2.0, 2.0]
+            }
+        )
+        
+        merger = ModelMerger(config)
+        merged_model = merger.merge()
+        
+        print("Task arithmetic merge completed!")
+        return merged_model
+    
+    def dialect_merge_example(self):
+        """Example of merging multiple Arabic dialect models"""
+        from src.training.model_merger import ModelMerger, MergeConfig
+        
+        config = MergeConfig(
+            strategy="weighted",
+            models=[
+                {"path": "./models/egyptian_arabic", "weight": 0.25, "name": "egyptian"},
+                {"path": "./models/gulf_arabic", "weight": 0.25, "name": "gulf"},
+                {"path": "./models/levantine_arabic", "weight": 0.25, "name": "levantine"},
+                {"path": "./models/maghrebi_arabic", "weight": 0.25, "name": "maghrebi"}
+            ],
+            output_path="./models/multi_dialect_arabic",
+            validation={
+                "run_tests": True,
+                "test_prompts": [
+                    "إزيك؟",      # Egyptian
+                    "شلونك؟",      # Gulf  
+                    "كيفك؟",       # Levantine
+                    "كيداير؟"      # Maghrebi
+                ]
+            }
+        )
+        
+        merger = ModelMerger(config)
+        multi_dialect_model = merger.merge()
+        
+        print("Multi-dialect merge completed!")
+        return multi_dialect_model
+
+# Usage example
+if __name__ == "__main__":
+    merger = ArabicModelMerger()
+    
+    # Try different merging strategies
+    print("1. Weighted merge...")
+    weighted_model = merger.weighted_merge_example()
+    
+    print("2. Task arithmetic merge...")
+    arithmetic_model = merger.task_arithmetic_example()
+    
+    print("3. Dialect merge...")
+    dialect_model = merger.dialect_merge_example()
+    
+    print("All merging examples completed!")
+```
+
+## 🗣️ Arabic Dialect Processing
+
+### Example 9: Dialect Detection and Augmentation
+
+```python
+class ArabicDialectProcessor:
+    def __init__(self):
+        self.detector = None
+        self.augmenter = None
+        self.processor = None
+        
+    def setup_dialect_tools(self):
+        """Initialize Arabic dialect processing tools"""
+        from src.utils.arabic_dialect_utils import (
+            ArabicDialectDetector,
+            ArabicTextAugmenter, 
+            ArabicDatasetProcessor
+        )
+        
+        self.detector = ArabicDialectDetector()
+        self.augmenter = ArabicTextAugmenter()
+        self.processor = ArabicDatasetProcessor()
+        
+        print("Arabic dialect tools initialized successfully!")
+    
+    def dialect_detection_example(self):
+        """Example of Arabic dialect detection"""
+        # Sample texts in different dialects
+        texts = [
+            "مرحبا كيف حالك؟",        # MSA
+            "إزيك يا صاحبي؟",         # Egyptian
+            "شلونك حبيبي؟",           # Gulf
+            "كيفك اليوم؟",            # Levantine
+            "كيداير؟"                # Maghrebi
+        ]
+        
+        print("Dialect Detection Results:")
+        print("=" * 50)
+        
+        for text in texts:
+            result = self.detector.detect_dialect(text)
+            print(f"Text: {text}")
+            print(f"Dialect: {result['dialect']} (Confidence: {result['confidence']:.2f})")
+            print(f"Is Arabic: {result['is_arabic']}")
+            print("-" * 30)
+    
+    def text_augmentation_example(self):
+        """Example of Arabic text augmentation"""
+        original_text = "كيف حالك اليوم؟"
+        
+        print(f"Original text: {original_text}")
+        print("Augmented versions:")
+        print("=" * 50)
+        
+        # Generate augmentations
+        augmented = self.augmenter.augment_text(original_text)
+        
+        for i, aug_text in enumerate(augmented, 1):
+            print(f"{i}. {aug_text}")
+        
+        # Dialect-specific augmentation
+        print("\nEgyptian dialect versions:")
+        print("-" * 30)
+        
+        egy_versions = self.augmenter.augment_text(
+            original_text, 
+            target_dialect="EGY"
+        )
+        
+        for i, egy_text in enumerate(egy_versions, 1):
+            print(f"{i}. {egy_text}")
+    
+    def dataset_processing_example(self):
+        """Example of processing dataset with dialect handling"""
+        from datasets import Dataset
+        
+        # Sample dataset
+        data = {
+            "text": [
+                "مرحبا كيف حالك؟",
+                "إزيك يا صاحبي؟", 
+                "شلونك حبيبي؟",
+                "كيفك اليوم؟",
+                "Hello, how are you?"  # Non-Arabic
+            ],
+            "label": ["greeting"] * 5
+        }
+        
+        dataset = Dataset.from_dict(data)
+        
+        # Processing configuration
+        config = {
+            "detect_dialects": True,
+            "augment_data": True,
+            "normalize_text": True,
+            "target_dialects": ["MSA", "EGY", "GLF"],
+            "augmentation_factor": 2
+        }
+        
+        # Process dataset
+        processed = self.processor.process_dataset(dataset, config)
+        
+        print("Dataset Processing Results:")
+        print("=" * 50)
+        print(f"Original size: {len(dataset)}")
+        print(f"Processed size: {len(processed)}")
+        
+        # Show sample processed entries
+        for i in range(min(3, len(processed))):
+            entry = processed[i]
+            print(f"\nEntry {i+1}:")
+            print(f"  Original: {entry.get('original_text', 'N/A')}")
+            print(f"  Processed: {entry.get('text', 'N/A')}")
+            print(f"  Dialect: {entry.get('dialect', 'N/A')}")
+            print(f"  Confidence: {entry.get('dialect_confidence', 'N/A')}")
+    
+    def training_integration_example(self):
+        """Example of integrating dialect processing with training"""
+        from datasets import Dataset
+        
+        # Create sample training data
+        training_data = {
+            "instruction": [
+                "اشرح لي مفهوم الذكاء الاصطناعي",
+                "إزاي أتعلم البرمجة؟",
+                "شلون أقدر أحسن من مهاراتي؟"
+            ],
+            "output": [
+                "الذكاء الاصطناعي هو...",
+                "عشان تتعلم البرمجة...",
+                "تقدر تحسن مهاراتك من خلال..."
+            ]
+        }
+        
+        dataset = Dataset.from_dict(training_data)
+        
+        # Process with dialect augmentation
+        config = {
+            "detect_dialects": True,
+            "augment_data": True,
+            "balance_dialects": True,
+            "target_dialects": ["MSA", "EGY", "GLF", "LEV"],
+            "augmentation_factor": 3
+        }
+        
+        augmented_dataset = self.processor.process_dataset(dataset, config)
+        
+        print("Training Data Augmentation:")
+        print("=" * 50)
+        print(f"Original samples: {len(dataset)}")
+        print(f"Augmented samples: {len(augmented_dataset)}")
+        
+        # Show dialect distribution
+        dialect_counts = {}
+        for entry in augmented_dataset:
+            dialect = entry.get('dialect', 'UNKNOWN')
+            dialect_counts[dialect] = dialect_counts.get(dialect, 0) + 1
+        
+        print("\nDialect distribution:")
+        for dialect, count in dialect_counts.items():
+            print(f"  {dialect}: {count} samples")
+
+# Usage example
+if __name__ == "__main__":
+    processor = ArabicDialectProcessor()
+    processor.setup_dialect_tools()
+    
+    print("1. Dialect Detection Example:")
+    processor.dialect_detection_example()
+    
+    print("\n2. Text Augmentation Example:")
+    processor.text_augmentation_example()
+    
+    print("\n3. Dataset Processing Example:")
+    processor.dataset_processing_example()
+    
+    print("\n4. Training Integration Example:")
+    processor.training_integration_example()
+    
+    print("\nAll dialect processing examples completed!")
 ```
 
 ## 🔄 Complete Training Scripts

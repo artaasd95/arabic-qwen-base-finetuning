@@ -40,6 +40,7 @@ The framework is organized into several key modules:
 | [SFTLoader](data_loader/sft_loader.md) | SFT data loading and preprocessing | `SFTDataLoader` |
 | [DPOLoader](data_loader/dpo_loader.md) | DPO data loading and preprocessing | `DPODataLoader` |
 | [PreferenceLoader](data_loader/preference_loader.md) | Preference data loading | `PreferenceDataLoader` |
+| [ArabicDialectUtils](data/arabic_dialect_utils.md) | Arabic dialect detection and processing | `ArabicDialectDetector`, `ArabicTextAugmenter` |
 
 ### Training Methods
 
@@ -50,6 +51,13 @@ The framework is organized into several key modules:
 | **KTO** | Kahneman-Tversky Optimization | [KTOTrainer](training/kto_trainer.md) |
 | **IPO** | Identity Preference Optimization | [IPOTrainer](training/ipo_trainer.md) |
 | **CPO** | Conservative Preference Optimization | [CPOTrainer](training/cpo_trainer.md) |
+| **SimPO** | Simple Preference Optimization | [SimPOTrainer](training/simpo_trainer.md) |
+
+### Model Merging
+
+| Component | Description | Documentation |
+|-----------|-------------|---------------|
+| **ModelMerger** | Advanced model merging with multiple strategies | [ModelMerger](training/model_merger.md) |
 
 ### Evaluation
 

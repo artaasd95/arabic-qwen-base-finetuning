@@ -6,12 +6,14 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-A comprehensive framework for fine-tuning Qwen models on Arabic datasets using various optimization methods including Supervised Fine-Tuning (SFT), Direct Preference Optimization (DPO), Kahneman-Tversky Optimization (KTO), Identity Preference Optimization (IPO), and Conservative Preference Optimization (CPO).
+A comprehensive framework for fine-tuning Qwen models on Arabic datasets using various optimization methods including Supervised Fine-Tuning (SFT), Direct Preference Optimization (DPO), Kahneman-Tversky Optimization (KTO), Identity Preference Optimization (IPO), Conservative Preference Optimization (CPO), Odds Ratio Preference Optimization (ORPO), and Simple Preference Optimization (SimPO).
 
 ## 🌟 Features
 
-- **Multiple Training Methods**: Support for SFT, DPO, KTO, IPO, and CPO
-- **Arabic Language Support**: Specialized handling for Arabic text processing
+- **Multiple Training Methods**: Support for SFT, DPO, KTO, IPO, CPO, ORPO, and SimPO
+- **Advanced Model Merging**: Automated model merging with multiple strategies (weighted, sequential, task arithmetic, SLERP)
+- **Arabic Dialect Support**: Comprehensive Arabic dialect detection, augmentation, and dataset processing
+- **Arabic Language Support**: Specialized handling for Arabic text processing and normalization
 - **Modular Architecture**: Clean, extensible codebase with clear separation of concerns
 - **Comprehensive Evaluation**: Built-in evaluation metrics and benchmarks
 - **Configuration Management**: YAML-based configuration with environment variable support
@@ -25,6 +27,8 @@ A comprehensive framework for fine-tuning Qwen models on Arabic datasets using v
 - [Quick Start](#-quick-start)
 - [Configuration](#-configuration)
 - [Training Methods](#-training-methods)
+- [Model Merging](#-model-merging)
+- [Arabic Dialect Support](#️-arabic-dialect-support)
 - [Data Preparation](#-data-preparation)
 - [Evaluation](#-evaluation)
 - [Advanced Usage](#-advanced-usage)
@@ -115,6 +119,23 @@ python -m src.scripts.train --method sft --config config/sft_config.yaml
 
 ```bash
 arabic-qwen-train --config config/dpo_config.yaml
+```
+
+#### Simple Preference Optimization (SimPO)
+
+```bash
+arabic-qwen-train --config config/simpo_config.yaml
+```
+
+#### Model Merging
+
+```bash
+# Merge multiple trained models
+python scripts/merge_models.py \
+  --models ./models/qwen-3-base-arabic-arabic-chat-SFT ./models/qwen-3-base-arabic-arabic-chat-DPO \
+  --strategy weighted \
+  --weights 0.7 0.3 \
+  --output ./merged_models/sft_dpo_weighted
 ```
 
 ### 4. Evaluate the Model
@@ -234,6 +255,100 @@ from src.config.kto_config import KTOConfig
 config = KTOConfig.load("config/kto_config.yaml")
 trainer = KTOTrainer(config)
 trainer.train()
+```
+
+### Odds Ratio Preference Optimization (ORPO)
+
+Combine SFT and preference optimization in a single stage:
+
+```python
+from src.training.orpo_trainer import ORPOTrainer
+from src.config.orpo_config import ORPOConfig
+
+config = ORPOConfig.load("config/orpo_config.yaml")
+trainer = ORPOTrainer(config)
+trainer.train()
+```
+
+### Simple Preference Optimization (SimPO)
+
+Simplified preference optimization without reference model:
+
+```python
+from src.training.simpo_trainer import SimPOTrainer
+from src.config.simpo_config import SimPOConfig
+
+config = SimPOConfig.load("config/simpo_config.yaml")
+trainer = SimPOTrainer(config)
+trainer.train()
+```
+
+## 🔄 Model Merging
+
+Combine multiple trained models using various strategies:
+
+### Merging Strategies
+
+- **Weighted**: Combine models with specified weights
+- **Sequential**: Apply models in sequence
+- **Task Arithmetic**: Add/subtract task-specific capabilities
+- **SLERP**: Spherical linear interpolation for smooth transitions
+
+```python
+from scripts.merge_models import ModelMerger, MergeConfig
+
+# Configure merging
+config = MergeConfig(
+    models=["./models/sft_model", "./models/dpo_model"],
+    strategy="weighted",
+    weights=[0.7, 0.3],
+    output_dir="./merged_models/sft_dpo_weighted"
+)
+
+# Perform merge
+merger = ModelMerger(config)
+merged_model = merger.merge()
+```
+
+## 🗣️ Arabic Dialect Support
+
+Comprehensive support for Arabic dialect processing:
+
+### Dialect Detection
+
+```python
+from src.utils.arabic_dialect_utils import ArabicDialectDetector
+
+detector = ArabicDialectDetector()
+dialect, confidence = detector.detect_dialect("ازيك يا صاحبي؟")
+print(f"Detected: {dialect} (confidence: {confidence:.2f})")
+```
+
+### Dialect Augmentation
+
+```python
+from src.utils.arabic_dialect_utils import ArabicDialectAugmentor
+
+augmentor = ArabicDialectAugmentor()
+egyptian_text = augmentor.augment_text("كيف حالك؟", target_dialect="egyptian")
+print(f"Egyptian: {egyptian_text}")  # Output: "ازيك؟"
+```
+
+### Dataset Processing
+
+```python
+from src.utils.arabic_dialect_utils import ArabicDialectDatasetProcessor
+
+processor = ArabicDialectDatasetProcessor()
+
+# Analyze dialect distribution
+analysis = processor.analyze_dataset_dialects(dataset)
+
+# Balance dataset by dialect
+balanced_dataset = processor.balance_dataset_by_dialect(dataset)
+
+# Create dialect-specific splits
+dialect_splits = processor.create_dialect_specific_splits(dataset)
 ```
 
 ## 📊 Data Preparation
