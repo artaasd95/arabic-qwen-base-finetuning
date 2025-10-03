@@ -671,3 +671,190 @@ def export_dataset_report(
         write_analysis("Dataset Analysis", analysis)
     
     logger.info(f"Dataset report exported to {output_path}")
+
+
+# Arabic Dialect Integration Functions
+def process_arabic_dialects(
+    dataset: Dataset,
+    text_column: str = "text",
+    balance_dialects: bool = True,
+    target_samples_per_dialect: int = 1000,
+    create_splits: bool = True,
+    augment_data: bool = True,
+    min_confidence: float = 0.5
+) -> Dict[str, Any]:
+    """Process dataset with Arabic dialect-specific handling.
+    
+    Args:
+        dataset: Input dataset
+        text_column: Column containing text data
+        balance_dialects: Whether to balance dialect distribution
+        target_samples_per_dialect: Target samples per dialect when balancing
+        create_splits: Whether to create dialect-specific splits
+        augment_data: Whether to augment with dialect variations
+        min_confidence: Minimum confidence for dialect classification
+        
+    Returns:
+        Processing results and statistics
+    """
+    try:
+        from .arabic_dialect_utils import ArabicDialectDatasetProcessor
+        
+        processor = ArabicDialectDatasetProcessor()
+        
+        # Analyze original dataset
+        analysis = processor.analyze_dataset_dialects(dataset, text_column)
+        logger.info(f"Original dataset dialect distribution: {analysis['dialect_distribution']}")
+        
+        results = {
+            "original_analysis": analysis,
+            "processed_dataset": dataset
+        }
+        
+        # Balance dialects if requested
+        if balance_dialects:
+            balanced_dataset = processor.balance_dataset_by_dialect(
+                dataset,
+                text_column=text_column,
+                target_samples_per_dialect=target_samples_per_dialect
+            )
+            results["processed_dataset"] = balanced_dataset
+            results["balanced_analysis"] = processor.analyze_dataset_dialects(
+                balanced_dataset, text_column
+            )
+        
+        # Create dialect splits if requested
+        if create_splits:
+            dialect_splits = processor.create_dialect_specific_splits(
+                results["processed_dataset"],
+                text_column=text_column,
+                min_confidence=min_confidence
+            )
+            results["dialect_splits"] = dialect_splits
+        
+        # Augment with dialects if requested
+        if augment_data:
+            from .arabic_dialect_utils import ArabicDialect
+            target_dialects = [
+                ArabicDialect.EGYPTIAN,
+                ArabicDialect.LEVANTINE,
+                ArabicDialect.GULF
+            ]
+            
+            augmented_dataset = processor.augment_dataset_with_dialects(
+                results["processed_dataset"],
+                text_column=text_column,
+                target_dialects=target_dialects,
+                augmentation_factor=1
+            )
+            results["processed_dataset"] = augmented_dataset
+            results["augmented_analysis"] = processor.analyze_dataset_dialects(
+                augmented_dataset, text_column
+            )
+        
+        return results
+        
+    except ImportError:
+        logger.warning("Arabic dialect utilities not available. Skipping dialect processing.")
+        return {"processed_dataset": dataset, "error": "Arabic dialect utilities not available"}
+
+
+def detect_text_dialect(text: str) -> Tuple[str, float]:
+    """Detect Arabic dialect in text.
+    
+    Args:
+        text: Text to analyze
+        
+    Returns:
+        Tuple of (dialect_name, confidence_score)
+    """
+    try:
+        from .arabic_dialect_utils import ArabicDialectDetector
+        
+        detector = ArabicDialectDetector()
+        dialect, confidence = detector.detect_dialect(text)
+        return dialect.value, confidence
+        
+    except ImportError:
+        logger.warning("Arabic dialect utilities not available.")
+        return "unknown", 0.0
+
+
+def augment_text_with_dialect(text: str, target_dialect: str) -> str:
+    """Augment text to match target Arabic dialect.
+    
+    Args:
+        text: Original text
+        target_dialect: Target dialect name
+        
+    Returns:
+        Augmented text
+    """
+    try:
+        from .arabic_dialect_utils import ArabicDialectAugmentor, ArabicDialect
+        
+        augmentor = ArabicDialectAugmentor()
+        dialect_enum = ArabicDialect(target_dialect)
+        return augmentor.augment_text(text, dialect_enum)
+        
+    except (ImportError, ValueError):
+        logger.warning(f"Could not augment text with dialect {target_dialect}")
+        return text
+
+
+def create_dialect_balanced_dataset(
+    input_path: str,
+    output_path: str,
+    text_column: str = "text",
+    target_samples: int = 1000
+) -> Dict[str, Any]:
+    """Create a dialect-balanced dataset from input data.
+    
+    Args:
+        input_path: Path to input dataset
+        output_path: Path to save balanced dataset
+        text_column: Column containing text data
+        target_samples: Target samples per dialect
+        
+    Returns:
+        Processing results
+    """
+    logger.info(f"Creating dialect-balanced dataset: {input_path} -> {output_path}")
+    
+    # Load dataset
+    dataset = load_dataset_from_path(input_path)
+    
+    # Process with dialect handling
+    results = process_arabic_dialects(
+        dataset,
+        text_column=text_column,
+        balance_dialects=True,
+        target_samples_per_dialect=target_samples,
+        create_splits=False,
+        augment_data=True
+    )
+    
+    # Save processed dataset
+    save_dataset(results["processed_dataset"], output_path)
+    
+    # Save processing report
+    report_path = Path(output_path).parent / "dialect_processing_report.json"
+    with open(report_path, 'w', encoding='utf-8') as f:
+        # Convert any non-serializable objects
+        serializable_results = {}
+        for key, value in results.items():
+            if key == "processed_dataset":
+                serializable_results[key] = f"Dataset with {len(value)} samples"
+            elif key == "dialect_splits":
+                serializable_results[key] = {
+                    dialect: len(split) for dialect, split in value.items()
+                }
+            else:
+                serializable_results[key] = value
+        
+        json.dump(serializable_results, f, indent=2, ensure_ascii=False)
+    
+    logger.info(f"Dialect-balanced dataset created: {output_path}")
+    logger.info(f"Processing report saved: {report_path}")
+    
+    return results

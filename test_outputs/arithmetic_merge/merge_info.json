@@ -1,0 +1,10 @@
+{
+  "strategy": "task_arithmetic",
+  "source_models": [
+    "models\\qwen-3-base-arabic-arabic-chat-CPO",
+    "models\\qwen-3-base-arabic-arabic-chat-DPO"
+  ],
+  "weights": null,
+  "base_model": "Qwen/Qwen2.5-3B-Instruct",
+  "test_run": true
+}

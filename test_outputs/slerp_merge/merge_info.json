@@ -1,0 +1,12 @@
+{
+  "strategy": "slerp",
+  "source_models": [
+    "models\\qwen-3-base-arabic-arabic-chat-CPO",
+    "models\\qwen-3-base-arabic-arabic-chat-DPO"
+  ],
+  "weights": [
+    0.7
+  ],
+  "base_model": null,
+  "test_run": true
+}

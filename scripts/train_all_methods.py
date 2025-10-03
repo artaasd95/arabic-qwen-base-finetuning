@@ -22,6 +22,8 @@ from src.training.dpo_trainer import DPOTrainer
 from src.training.kto_trainer import KTOTrainer
 from src.training.ipo_trainer import IPOTrainer
 from src.training.cpo_trainer import CPOTrainer
+from src.training.orpo_trainer import ORPOTrainer
+from src.training.simpo_trainer import SimPOTrainer
 from src.config.training_config import TrainingConfig
 from src.data.data_loader import DataLoader
 from src.utils.metrics import MetricsTracker
@@ -54,7 +56,9 @@ class ComprehensiveTrainer:
             'dpo': DPOTrainer,
             'kto': KTOTrainer,
             'ipo': IPOTrainer,
-            'cpo': CPOTrainer
+            'cpo': CPOTrainer,
+            'orpo': ORPOTrainer,
+            'simpo': SimPOTrainer
         }
         
         # Results storage
@@ -96,7 +100,7 @@ class ComprehensiveTrainer:
                 'train': data_loader.load_sft_data("data/sft/arabic_sft_samples.json"),
                 'eval': data_loader.load_sft_data("data/evaluation/arabic_eval_samples.json")
             }
-        elif method in ['dpo', 'ipo', 'cpo']:
+        elif method in ['dpo', 'ipo', 'cpo', 'orpo', 'simpo']:
             return {
                 'train': data_loader.load_preference_data("data/dpo/arabic_dpo_samples.json"),
                 'eval': data_loader.load_preference_data("data/dpo/arabic_dpo_samples.json")  # Use same for eval

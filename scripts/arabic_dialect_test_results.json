@@ -1,0 +1,160 @@
+{
+  "dialect_detection": {
+    "Egyptian": [
+      {
+        "text": "ازيك يا صاحبي؟ ايه اخبارك؟",
+        "detected": "unknown",
+        "confidence": 0.25,
+        "correct": false
+      },
+      {
+        "text": "انا عايز اروح البيت دلوقتي",
+        "detected": "unknown",
+        "confidence": 0.1,
+        "correct": false
+      },
+      {
+        "text": "مش عارف ايه اللي حصل",
+        "detected": "egyptian",
+        "confidence": 0.35,
+        "correct": true
+      }
+    ],
+    "Levantine": [
+      {
+        "text": "شو اخبارك؟ كيفك اليوم؟",
+        "detected": "levantine",
+        "confidence": 0.375,
+        "correct": true
+      },
+      {
+        "text": "بدي اروح عالبيت هلأ",
+        "detected": "unknown",
+        "confidence": 0.1,
+        "correct": false
+      },
+      {
+        "text": "ما بعرف شو صار",
+        "detected": "levantine",
+        "confidence": 0.35,
+        "correct": true
+      }
+    ],
+    "Gulf": [
+      {
+        "text": "شلونك؟ شنو اخبارك؟",
+        "detected": "gulf",
+        "confidence": 0.375,
+        "correct": true
+      },
+      {
+        "text": "ابي اروح البيت الحين",
+        "detected": "unknown",
+        "confidence": 0.1,
+        "correct": false
+      },
+      {
+        "text": "ما ادري شنو صار",
+        "detected": "unknown",
+        "confidence": 0.275,
+        "correct": false
+      }
+    ],
+    "MSA": [
+      {
+        "text": "كيف حالك؟ ما أخبارك؟",
+        "detected": "unknown",
+        "confidence": 0.2,
+        "correct": false
+      },
+      {
+        "text": "أريد أن أذهب إلى البيت الآن",
+        "detected": "unknown",
+        "confidence": 0.09523809523809523,
+        "correct": false
+      },
+      {
+        "text": "لا أعرف ماذا حدث",
+        "detected": "unknown",
+        "confidence": 0.2619047619047619,
+        "correct": false
+      }
+    ],
+    "accuracy": 0.3333333333333333
+  },
+  "dialect_augmentation": {
+    "original": "كيف حالك؟ أريد أن أذهب إلى البيت",
+    "augmented": {
+      "egyptian": "ازاي حالك؟ عايز أن أذهب إلى البيت",
+      "levantine": "شو حالك؟ بدي أن أذهب إلى البيت",
+      "gulf": "شلون حالك؟ ابي أن أذهب إلى البيت"
+    }
+  },
+  "arabic_text_detection": {
+    "accuracy": 1.0,
+    "results": [
+      {
+        "text": "مرحبا بك في العالم العربي",
+        "expected": true,
+        "detected": true,
+        "correct": true
+      },
+      {
+        "text": "Hello world",
+        "expected": false,
+        "detected": false,
+        "correct": true
+      },
+      {
+        "text": "مرحبا Hello",
+        "expected": true,
+        "detected": true,
+        "correct": true
+      },
+      {
+        "text": "123456",
+        "expected": false,
+        "detected": false,
+        "correct": true
+      },
+      {
+        "text": "السلام عليكم",
+        "expected": true,
+        "detected": true,
+        "correct": true
+      },
+      {
+        "text": "",
+        "expected": false,
+        "detected": false,
+        "correct": true
+      }
+    ]
+  },
+  "text_normalization": [
+    {
+      "original": "مَرْحَبًا",
+      "normalized": "مرحبا",
+      "expected": "مرحبا",
+      "processed": true
+    },
+    {
+      "original": "  كيف   حالك  ",
+      "normalized": "كيف حالك",
+      "expected": "كيف حالك",
+      "processed": true
+    },
+    {
+      "original": "الكِتَابُ",
+      "normalized": "الكتاب",
+      "expected": "الكتاب",
+      "processed": true
+    },
+    {
+      "original": "HELLO مرحبا",
+      "normalized": "hello مرحبا",
+      "expected": "hello مرحبا",
+      "processed": true
+    }
+  ]
+}

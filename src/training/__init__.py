@@ -7,6 +7,8 @@ including SFT, DPO, KTO, IPO, and CPO.
 from .base_trainer import BaseTrainer
 from .sft_trainer import SFTTrainer, create_sft_trainer
 from .dpo_trainer import DPOTrainer, create_dpo_trainer
+from .orpo_trainer import ORPOTrainer
+from .simpo_trainer import SimPOTrainer
 from .preference_trainer import (
     PreferenceTrainer,
     create_preference_trainer,
@@ -22,6 +24,8 @@ __all__ = [
     # Specific trainers
     "SFTTrainer",
     "DPOTrainer", 
+    "ORPOTrainer",
+    "SimPOTrainer",
     "PreferenceTrainer",
     
     # Factory functions
@@ -63,6 +67,10 @@ def get_trainer(method: str, config):
         return create_ipo_trainer(config)
     elif method == "cpo":
         return create_cpo_trainer(config)
+    elif method == "orpo":
+        return ORPOTrainer(config)
+    elif method == "simpo":
+        return SimPOTrainer(config)
     else:
         raise ValueError(
             f"Unsupported training method: {method}. "
@@ -76,4 +84,4 @@ def list_supported_training_methods():
     Returns:
         List of supported training method names
     """
-    return ["sft", "dpo", "kto", "ipo", "cpo"]
+    return ["sft", "dpo", "kto", "ipo", "cpo", "orpo", "simpo"]

@@ -1,0 +1,13 @@
+{
+  "strategy": "weighted",
+  "source_models": [
+    "models\\qwen-3-base-arabic-arabic-chat-CPO",
+    "models\\qwen-3-base-arabic-arabic-chat-DPO"
+  ],
+  "weights": [
+    0.6,
+    0.4
+  ],
+  "base_model": null,
+  "test_run": true
+}

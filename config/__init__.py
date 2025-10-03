@@ -10,6 +10,8 @@ from .dpo_config import DPOConfig
 from .kto_config import KTOConfig
 from .ipo_config import IPOConfig
 from .cpo_config import CPOConfig
+from .orpo_config import ORPOConfig
+from .simpo_config import SimPOConfig
 from .env_config import ConfigFactory, load_env_file, validate_environment, create_sample_env_file
 
 __all__ = [
@@ -20,6 +22,8 @@ __all__ = [
     "KTOConfig",
     "IPOConfig",
     "CPOConfig",
+    "ORPOConfig",
+    "SimPOConfig",
     
     # Utilities
     "ConfigFactory",
